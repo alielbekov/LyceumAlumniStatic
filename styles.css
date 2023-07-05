@@ -1,0 +1,111 @@
+/* Reset default browser styles */
+body, h1, h2, h3, p, ul, li {
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Set minimum height of the body to full viewport height */
+    font-family: Arial, sans-serif;
+    line-height: 1.5;
+  }
+  
+  header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+  }
+  
+  nav ul {
+    list-style: none;
+  }
+  
+  nav ul li {
+    display: inline-block;
+    margin-right: 10px;
+  }
+  
+  nav ul li a {
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  main {
+    flex: 1; /* Grow and fill remaining vertical space */
+    padding: 20px;
+  }
+  
+  .hero {
+    text-align: center;
+    padding: 50px 0;
+  }
+  
+  .about {
+    margin-top: 40px;
+  }
+  
+  .events {
+    margin-top: 40px;
+  }
+  
+  .event-card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .btn {
+    display: inline-block;
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+  .graduate-card {
+    display: inline-block;
+    padding: 20px;
+  }
+  
+  footer {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    margin-top: auto; /* Push the footer to the bottom of the page */
+  }
+  img{
+    width: 150px;
+  }
+  
+/* Responsive CSS for smaller screens */
+@media (max-width: 768px) {
+  header {
+    padding: 5px;
+  }
+
+  nav ul li {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  main {
+    padding: 10px;
+  }
+
+  .hero {
+    padding: 30px 0;
+  }
+
+  .event-card {
+    padding: 10px;
+  }
+
+  .btn {
+    display: block;
+    width: 100%;
+  }
+}
