@@ -1,115 +1,64 @@
 /* Reset default browser styles */
 body, h1, h2, h3, p, ul, li {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh; /* Set minimum height of the body to full viewport height */
-  font-family: Arial, sans-serif;
-  line-height: 1.5;
-  background-color: #FDFCFB; /* Cream color */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    line-height: 1.5;
+    background-color: #FDFCFB; /* Cream color */
 }
 
 header {
-  background-color: #1C56AC; /* Uzbekistan Blue */
-  color: #FFFFFF; /* Star White */
-  padding: 10px;
+    background-color: #1C56AC; /* Uzbekistan Blue */
+    color: #FFFFFF; /* Star White */
+    padding: 10px;
 }
 
 nav ul {
-  list-style: none;
+    list-style: none;
 }
 
-nav ul li {
-  display: inline-block;
-  margin-right: 10px;
-}
+    nav ul li {
+        display: inline-block;
+        margin-right: 10px;
+    }
 
-nav ul li a {
-  color: #FFFFFF; /* Star White */
-  text-decoration: none;
-}
+        nav ul li a {
+            color: #FFFFFF; /* Star White */
+            text-decoration: none;
+        }
 
 main {
-  flex: 1; /* Grow and fill remaining vertical space */
-  padding: 20px;
+    flex: 1;
+    padding: 20px;
 }
 
-.hero {
-  text-align: center;
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-gap: 10px;
 }
 
-.about {
-  margin-top: 40px;
+.card {
+    width: 100%;
+    max-width: 200px; /* Adjust the maximum width as per your preference */
+    margin: 20px;
 }
 
-.events {
-  margin-top: 40px;
-}
-
-.event-card {
-  background-color: #FDFCFB; /* Cream color */
-  border: 1px solid #DDD;
-  padding: 20px;
-  margin-bottom: 20px;
-}
-
-.btn {
-  display: inline-block;
-  background-color: #CE1126; /* Uzbekistan Red */
-  color: #FFFFFF; /* Star White */
-  padding: 10px 20px;
-  text-decoration: none;
-  border-radius: 5px;
-}
-
-.graduate-card {
-  display: inline-block;
-  padding: 20px;
-  background-color: #00945A; /* Uzbekistan Green */
-  color: #FFFFFF; /* Star White */
+.card-img-top {
+    width: 100%;
+    height: auto;
 }
 
 footer {
-  background-color: #1C56AC; /* Uzbekistan Blue */
-  color: #FFFFFF; /* Star White */
-  padding: 10px;
-  text-align: center;
-  margin-top: auto; /* Push the footer to the bottom of the page */
-}
-
-img {
-  width: 150px;
-}
-
-/* Responsive CSS for smaller screens */
-@media (max-width: 768px) {
-  header {
-      padding: 5px;
-  }
-
-  nav ul li {
-      display: block;
-      margin-bottom: 5px;
-  }
-
-  main {
-      padding: 10px;
-  }
-
-  .hero {
-    
-  }
-
-  .event-card {
-      padding: 10px;
-  }
-
-  .btn {
-      display: block;
-      width: 100%;
-  }
+    background-color: #1C56AC; /* Uzbekistan Blue */
+    color: #FFFFFF; /* Star White */
+    padding: 10px;
+    text-align: center;
+    margin-top: auto; /* Push the footer to the bottom of the page */
 }
