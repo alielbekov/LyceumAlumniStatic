@@ -1,0 +1,15 @@
+<header>
+    <nav>
+      <div class="d-flex justify-content-between align-items-center">
+        <a class="btn btn-primary" href="/">Home</a>
+        <ul class="list-unstyled d-flex gap-2">
+            <% years.forEach(year => { %>
+              <li><a class="btn btn-primary year" href="/<%= year %>"><%= year %></a></li>
+            <% }); %>
+        </ul>
+          
+        <a class="btn btn-primary" href="/teachers">Teachers</a>
+      </div>
+    </nav>
+  </header>
+  

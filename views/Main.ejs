@@ -1,0 +1,20 @@
+<main>
+    <div class="d-flex justify-content-center align-items-center">
+      <button class="btn btn-secondary gallery">Main Gallery</button>
+      <button class="btn btn-secondary gallery">Community Gallery</button>
+    </div>
+    <div class="user-images">
+      <div class="card-grid">
+        <% cards.forEach(card => { %>
+          <div class="card">
+            <img src="<%= card.image %>" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title"><%= card.firstName %> <%= card.lastName %></h5>
+              <p class="card-text"><%= card.text %></p>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    </div>
+  </main>
+  
