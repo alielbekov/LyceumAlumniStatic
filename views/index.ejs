@@ -13,9 +13,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 </head>
-<body>
+  <body>
   <%- include('./Header.ejs', { years: years }) %>
-  <%- include('./Main.ejs', { cards: cards, year: year }) %>
+
+  <% if(year) { %>
+    <%- include('./Main.ejs', { cards: cards, year: year }) %>
+  <% } else { %>
+    <%- include('./Landing.ejs', { cards: cards, year: year }) %>
+  <% } %>
+
   <%- include('./Footer.ejs') %>
+
 </body>
 </html>
