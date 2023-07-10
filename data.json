@@ -1,170 +1,170 @@
 [
   {
-    "firstName": "Ali",
-    "lastName": "Elbekov",
-    "gradYear": 2017,
-    "image": "/images/2017/filler.jpg",
-    "isTeacher": false
-  },
-  {
     "firstName": "Bobur",
     "lastName": "Abdurahmanov",
     "gradYear": 2017,
-    "image": "/images/2017/filler.jpg",
+    "image": "/images/2017/BoburAbdurahmanov.jpg",
     "isTeacher": false
   },
   {
     "firstName": "Muhammadyusuf",
     "lastName": "Abdurazzaqov",
     "gradYear": 2017,
-    "image": "/images/2017/filler.jpg",
+    "image": "/images/2017/MuhammadyusufAbdurazzaqov.jpg",
     "isTeacher": false
   },
   {
     "firstName": "Asadbek",
     "lastName": "Adashev",
     "gradYear": 2017,
-    "image": "/images/2017/filler.jpg",
+    "image": "/images/2017/AsadbekAdashev.jpg",
     "isTeacher": false
   },
   {
     "firstName": "Sardor",
     "lastName": "Ahmedov",
     "gradYear": 2017,
-    "image": "/images/2017/filler.jpg",
+    "image": "/images/2017/SardorAhmedov.jpg",
     "isTeacher": false
   },
   {
     "firstName": "Javohir",
     "lastName": "Akarmjanov",
     "gradYear": 2017,
-    "image": "/images/2017/filler.jpg",
+    "image": "/images/2017/JavohirAkarmjanov.jpg",
     "isTeacher": false
   },
   {
     "firstName": "Samandar",
     "lastName": "Akbarov",
     "gradYear": 2017,
-    "image": "/images/2017/filler.jpg",
+    "image": "/images/2017/SamandarAkbarov.jpg",
     "isTeacher": false
   },
   {
     "firstName": "Jonibek",
     "lastName": "Amirqulov",
     "gradYear": 2017,
-    "image": "/images/2017/filler.jpg",
+    "image": "/images/2017/JonibekAmirqulov.jpg",
     "isTeacher": false
   },
   {
     "firstName": "Muhammadyusuf",
     "lastName": "Aralhanov",
     "gradYear": 2017,
-    "image": "/images/2017/filler.jpg",
+    "image": "/images/2017/MuhammadyusufAralhanov.jpg",
     "isTeacher": false
   },
   {
     "firstName": "Komiljon",
     "lastName": "Asqarov",
     "gradYear": 2017,
-    "image": "/images/2017/filler.jpg",
+    "image": "/images/2017/KomiljonAsqarov.jpg",
     "isTeacher": false
   },
   {
     "firstName": "Asror",
     "lastName": "Bekmirzayev",
     "gradYear": 2017,
-    "image": "/images/2017/filler.jpg",
+    "image": "/images/2017/AsrorBekmirzayev.jpg",
     "isTeacher": false
   },
   {
     "firstName": "Asadbek",
     "lastName": "Hakimov",
     "gradYear": 2017,
-    "image": "/images/2017/filler.jpg",
+    "image": "/images/2017/AsadbekHakimov.jpg",
     "isTeacher": false
   },
   {
     "firstName": "Sirojiddin",
     "lastName": "Jamoliddinov",
     "gradYear": 2017,
-    "image": "/images/2017/filler.jpg",
+    "image": "/images/2017/SirojiddinJamoliddinov.jpg",
     "isTeacher": false
   },
   {
     "firstName": "Yassaviy",
     "lastName": "Maqsudov",
     "gradYear": 2017,
-    "image": "/images/2017/filler.jpg",
+    "image": "/images/2017/YassaviyMaqsudov.jpg",
     "isTeacher": false
   },
   {
     "firstName": "Mirilyos",
     "lastName": "Mirzarahimov",
     "gradYear": 2017,
-    "image": "/images/2017/filler.jpg",
+    "image": "/images/2017/MirilyosMirzarahimov.jpg",
     "isTeacher": false
   },
   {
     "firstName": "Mirzabek",
     "lastName": "Otamirzayev",
     "gradYear": 2017,
-    "image": "/images/2017/filler.jpg",
+    "image": "/images/2017/MirzabekOtamirzayev.jpg",
     "isTeacher": false
   },
   {
     "firstName": "Muhiddin",
     "lastName": "Qayumov",
     "gradYear": 2017,
-    "image": "/images/2017/filler.jpg",
+    "image": "/images/2017/MuhiddinQayumov.jpg",
     "isTeacher": false
   },
   {
     "firstName": "Behruz",
     "lastName": "Qodirxanov",
     "gradYear": 2017,
-    "image": "/images/2017/filler.jpg",
+    "image": "/images/2017/BehruzQodirxanov.jpg",
     "isTeacher": false
   },
   {
     "firstName": "Komiljon",
     "lastName": "Rahimjanov",
     "gradYear": 2017,
-    "image": "/images/2017/filler.jpg",
+    "image": "/images/2017/KomiljonRahimjanov.jpg",
     "isTeacher": false
   },
   {
     "firstName": "Ulug'bek",
     "lastName": "Tohirjanov",
     "gradYear": 2017,
-    "image": "/images/2017/filler.jpg",
+    "image": "/images/2017/UlugbekTohirjanov.jpg",
     "isTeacher": false
   },
   {
     "firstName": "Shaxriyor",
     "lastName": "Toshpo'latov",
     "gradYear": 2017,
-    "image": "/images/2017/filler.jpg",
+    "image": "/images/2017/ShaxriyorToshpolatov.jpg",
     "isTeacher": false
   },
   {
     "firstName": "Shohjahon",
     "lastName": "Toshtemirov",
     "gradYear": 2017,
-    "image": "/images/2017/filler.jpg",
+    "image": "/images/2017/ShohjahonToshtemirov.jpg",
     "isTeacher": false
   },
   {
     "firstName": "Ismoil",
     "lastName": "Tusunov",
     "gradYear": 2017,
-    "image": "/images/2017/filler.jpg",
+    "image": "/images/2017/IsmoilTusunov.jpg",
     "isTeacher": false
   },
   {
     "firstName": "Temur",
     "lastName": "Umurzaqov",
     "gradYear": 2017,
-    "image": "/images/2017/filler.jpg",
+    "image": "/images/2017/TemurUmurzaqov.jpg",
+    "isTeacher": false
+  },
+  {
+    "firstName": "Ali",
+    "lastName": "Elbekov",
+    "gradYear": 2017,
+    "image": "/images/2017/AliElbekov.jpg",
     "isTeacher": false
   }
 ]
