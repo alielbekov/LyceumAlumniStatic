@@ -1,367 +1,170 @@
 [
-    {
-      "firstName": "John",
-      "lastName": "Doe",
-      "gradYear": 2020,
-      "image": "/images/Ali.jpg",
-      "isTeacher": true
-    },
-    {
-      "firstName": "Jane",
-      "lastName": "Smith",
-      "gradYear": 2021,
-      "image": "/images/Jonibek.jpg",
-      "isTeacher": false
-    },
-    {
-      "firstName": "Mark",
-      "lastName": "Johnson",
-      "gradYear": 2021,
-      "image": "/images/Kamoliddin.jpg",
-      "isTeacher": false
-    },
-    {
-      "firstName": "Emily",
-      "lastName": "Williams",
-      "gradYear": 2022,
-      "image": "/images/Ali.jpg",
-      "isTeacher": true
-    },
-    {
-      "firstName": "Michael",
-      "lastName": "Brown",
-      "gradYear": 2022,
-      "image": "/images/Jonibek.jpg",
-      "isTeacher": false
-    },
-    {
-      "firstName": "Sophia",
-      "lastName": "Davis",
-      "gradYear": 2023,
-      "image": "/images/Kamoliddin.jpg",
-      "isTeacher": false
-    },
-    {
-      "firstName": "Olivia",
-      "lastName": "Taylor",
-      "gradYear": 2020,
-      "image": "/images/Ali.jpg",
-      "isTeacher": false
-    },
-    {
-      "firstName": "Daniel",
-      "lastName": "Wilson",
-      "gradYear": 2021,
-      "image": "/images/Jonibek.jpg",
-      "isTeacher": true
-    },
-    {
-      "firstName": "Lily",
-      "lastName": "Anderson",
-      "gradYear": 2021,
-      "image": "/images/Kamoliddin.jpg",
-      "isTeacher": false
-    },
-    {
-      "firstName": "James",
-      "lastName": "Thomas",
-      "gradYear": 2022,
-      "image": "/images/Ali.jpg",
-      "isTeacher": false
-    },
-    {
-      "firstName": "Sophie",
-      "lastName": "Clark",
-      "gradYear": 2022,
-      "image": "/images/Jonibek.jpg",
-      "isTeacher": true
-    },
-    {
-      "firstName": "Benjamin",
-      "lastName": "Walker",
-      "gradYear": 2023,
-      "image": "/images/Kamoliddin.jpg",
-      "isTeacher": false
-    },
-    {
-      "firstName": "Ava",
-      "lastName": "Moore",
-      "gradYear": 2020,
-      "image": "/images/Ali.jpg",
-      "isTeacher": false
-    },
-    {
-      "firstName": "William",
-      "lastName": "Lee",
-      "gradYear": 2020,
-      "image": "/images/Jonibek.jpg",
-      "isTeacher": true
-    },
-    {
-      "firstName": "Ella",
-      "lastName": "White",
-      "gradYear": 2021,
-      "image": "/images/Kamoliddin.jpg",
-      "isTeacher": false
-    },
-    {
-      "firstName": "Alexander",
-      "lastName": "Martin",
-      "gradYear": 2021,
-      "image": "/images/Ali.jpg",
-      "isTeacher": false
-    },
-    {
-      "firstName": "Mia",
-      "lastName": "Wilson",
-      "gradYear": 2022,
-      "image": "/images/Jonibek.jpg",
-      "isTeacher": true
-    },
-    {
-      "firstName": "Jacob",
-      "lastName": "Hall",
-      "gradYear": 2022,
-      "image": "/images/Kamoliddin.jpg",
-      "isTeacher": false
-    },
-    {
-      "firstName": "Chloe",
-      "lastName": "Young",
-      "gradYear": 2023,
-      "image": "/images/Ali.jpg",
-      "isTeacher": false
-    },
-    {
-      "firstName": "Andrew",
-      "lastName": "Adams",
-      "gradYear": 2023,
-      "image": "/images/Jonibek.jpg",
-      "isTeacher": true
-    },
-    {
-      "firstName": "Charlotte",
-      "lastName": "Mitchell",
-      "gradYear": 2020,
-      "image": "/images/Kamoliddin.jpg",
-      "isTeacher": false
-    },
-    {
-      "firstName": "Henry",
-      "lastName": "Turner",
-      "gradYear": 2020,
-      "image": "/images/Ali.jpg",
-      "isTeacher": false
-    },
-    {
-      "firstName": "Evelyn",
-      "lastName": "Parker",
-      "gradYear": 2021,
-      "image": "/images/Jonibek.jpg",
-      "isTeacher": true
-    },
-    {
-      "firstName": "Sebastian",
-      "lastName": "Cook",
-      "gradYear": 2021,
-      "image": "/images/Kamoliddin.jpg",
-      "isTeacher": false
-    },
-    {
-      "firstName": "Grace",
-      "lastName": "Lewis",
-      "gradYear": 2022,
-      "image": "/images/Ali.jpg",
-      "isTeacher": false
-    },
-    {
-      "firstName": "David",
-      "lastName": "Hill",
-      "gradYear": 2022,
-      "image": "/images/Jonibek.jpg",
-      "isTeacher": true
-    },
-    {
-      "firstName": "Sofia",
-      "lastName": "Roberts",
-      "gradYear": 2023,
-      "image": "/images/Kamoliddin.jpg",
-      "isTeacher": false
-    },
-    {
-      "firstName": "Joseph",
-      "lastName": "Russell",
-      "gradYear": 2023,
-      "image": "/images/Ali.jpg",
-      "isTeacher": false
-    },
-    {
-      "firstName": "Avery",
-      "lastName": "Hall",
-      "gradYear": 2020,
-      "image": "/images/Jonibek.jpg",
-      "isTeacher": true
-    },
-    {
-      "firstName": "Victoria",
-      "lastName": "Anderson",
-      "gradYear": 2020,
-      "image": "/images/Kamoliddin.jpg",
-      "isTeacher": false
-    },
-    {
-      "firstName": "Samuel",
-      "lastName": "Baker",
-      "gradYear": 2021,
-      "image": "/images/Ali.jpg",
-      "isTeacher": false
-    },
-    {
-      "firstName": "Madison",
-      "lastName": "Campbell",
-      "gradYear": 2021,
-      "image": "/images/Jonibek.jpg",
-      "isTeacher": true
-    },
-    {
-      "firstName": "Scarlett",
-      "lastName": "Kelly",
-      "gradYear": 2022,
-      "image": "/images/Kamoliddin.jpg",
-      "isTeacher": false
-    },
-    {
-      "firstName": "Dylan",
-      "lastName": "Cooper",
-      "gradYear": 2022,
-      "image": "/images/Ali.jpg",
-      "isTeacher": false
-    },
-    {
-      "firstName": "Aria",
-      "lastName": "Ward",
-      "gradYear": 2023,
-      "image": "/images/Jonibek.jpg",
-      "isTeacher": true
-    },
-    {
-      "firstName": "Luke",
-      "lastName": "Price",
-      "gradYear": 2023,
-      "image": "/images/Kamoliddin.jpg",
-      "isTeacher": false
-    },
-    {
-      "firstName": "Aubrey",
-      "lastName": "Morris",
-      "gradYear": 2020,
-      "image": "/images/Ali.jpg",
-      "isTeacher": false
-    },
-    {
-      "firstName": "Christopher",
-      "lastName": "Rogers",
-      "gradYear": 2020,
-      "image": "/images/Jonibek.jpg",
-      "isTeacher": true
-    },
-    {
-      "firstName": "Zoe",
-      "lastName": "Butler",
-      "gradYear": 2021,
-      "image": "/images/Kamoliddin.jpg",
-      "isTeacher": false
-    },
-    {
-      "firstName": "Julian",
-      "lastName": "Wright",
-      "gradYear": 2021,
-      "image": "/images/Ali.jpg",
-      "isTeacher": false
-    },
-    {
-      "firstName": "Hannah",
-      "lastName": "Sanders",
-      "gradYear": 2022,
-      "image": "/images/Jonibek.jpg",
-      "isTeacher": true
-    },
-    {
-      "firstName": "Nathan",
-      "lastName": "Carter",
-      "gradYear": 2022,
-      "image": "/images/Kamoliddin.jpg",
-      "isTeacher": false
-    },
-    {
-      "firstName": "Leah",
-      "lastName": "Murphy",
-      "gradYear": 2023,
-      "image": "/images/Ali.jpg",
-      "isTeacher": false
-    },
-    {
-      "firstName": "Isaac",
-      "lastName": "Stewart",
-      "gradYear": 2023,
-      "image": "/images/Jonibek.jpg",
-      "isTeacher": true
-    },
-    {
-      "firstName": "Natalie",
-      "lastName": "Powell",
-      "gradYear": 2020,
-      "image": "/images/Kamoliddin.jpg",
-      "isTeacher": false
-    },
-    {
-      "firstName": "Max",
-      "lastName": "Perry",
-      "gradYear": 2020,
-      "image": "/images/Ali.jpg",
-      "isTeacher": false
-    },
-    {
-      "firstName": "Addison",
-      "lastName": "Henderson",
-      "gradYear": 2021,
-      "image": "/images/Jonibek.jpg",
-      "isTeacher": true
-    },
-    {
-      "firstName": "Gabriel",
-      "lastName": "Bennett",
-      "gradYear": 2021,
-      "image": "/images/Kamoliddin.jpg",
-      "isTeacher": false
-    },
-    {
-      "firstName": "Audrey",
-      "lastName": "Richardson",
-      "gradYear": 2022,
-      "image": "/images/Ali.jpg",
-      "isTeacher": false
-    },
-    {
-      "firstName": "Leo",
-      "lastName": "Long",
-      "gradYear": 2022,
-      "image": "/images/Jonibek.jpg",
-      "isTeacher": true
-    },
-    {
-      "firstName": "Brooklyn",
-      "lastName": "Hamilton",
-      "gradYear": 2023,
-      "image": "/images/Kamoliddin.jpg",
-      "isTeacher": false
-    },
-    {
-      "firstName": "Julian",
-      "lastName": "Wright",
-      "gradYear": 2023,
-      "image": "/images/Ali.jpg",
-      "isTeacher": false
-    }
-  ]
-  
+  {
+    "firstName": "Ali",
+    "lastName": "Elbekov",
+    "gradYear": 2017,
+    "image": "/images/2017/filler.jpg",
+    "isTeacher": false
+  },
+  {
+    "firstName": "Bobur",
+    "lastName": "Abdurahmanov",
+    "gradYear": 2017,
+    "image": "/images/2017/filler.jpg",
+    "isTeacher": false
+  },
+  {
+    "firstName": "Muhammadyusuf",
+    "lastName": "Abdurazzaqov",
+    "gradYear": 2017,
+    "image": "/images/2017/filler.jpg",
+    "isTeacher": false
+  },
+  {
+    "firstName": "Asadbek",
+    "lastName": "Adashev",
+    "gradYear": 2017,
+    "image": "/images/2017/filler.jpg",
+    "isTeacher": false
+  },
+  {
+    "firstName": "Sardor",
+    "lastName": "Ahmedov",
+    "gradYear": 2017,
+    "image": "/images/2017/filler.jpg",
+    "isTeacher": false
+  },
+  {
+    "firstName": "Javohir",
+    "lastName": "Akarmjanov",
+    "gradYear": 2017,
+    "image": "/images/2017/filler.jpg",
+    "isTeacher": false
+  },
+  {
+    "firstName": "Samandar",
+    "lastName": "Akbarov",
+    "gradYear": 2017,
+    "image": "/images/2017/filler.jpg",
+    "isTeacher": false
+  },
+  {
+    "firstName": "Jonibek",
+    "lastName": "Amirqulov",
+    "gradYear": 2017,
+    "image": "/images/2017/filler.jpg",
+    "isTeacher": false
+  },
+  {
+    "firstName": "Muhammadyusuf",
+    "lastName": "Aralhanov",
+    "gradYear": 2017,
+    "image": "/images/2017/filler.jpg",
+    "isTeacher": false
+  },
+  {
+    "firstName": "Komiljon",
+    "lastName": "Asqarov",
+    "gradYear": 2017,
+    "image": "/images/2017/filler.jpg",
+    "isTeacher": false
+  },
+  {
+    "firstName": "Asror",
+    "lastName": "Bekmirzayev",
+    "gradYear": 2017,
+    "image": "/images/2017/filler.jpg",
+    "isTeacher": false
+  },
+  {
+    "firstName": "Asadbek",
+    "lastName": "Hakimov",
+    "gradYear": 2017,
+    "image": "/images/2017/filler.jpg",
+    "isTeacher": false
+  },
+  {
+    "firstName": "Sirojiddin",
+    "lastName": "Jamoliddinov",
+    "gradYear": 2017,
+    "image": "/images/2017/filler.jpg",
+    "isTeacher": false
+  },
+  {
+    "firstName": "Yassaviy",
+    "lastName": "Maqsudov",
+    "gradYear": 2017,
+    "image": "/images/2017/filler.jpg",
+    "isTeacher": false
+  },
+  {
+    "firstName": "Mirilyos",
+    "lastName": "Mirzarahimov",
+    "gradYear": 2017,
+    "image": "/images/2017/filler.jpg",
+    "isTeacher": false
+  },
+  {
+    "firstName": "Mirzabek",
+    "lastName": "Otamirzayev",
+    "gradYear": 2017,
+    "image": "/images/2017/filler.jpg",
+    "isTeacher": false
+  },
+  {
+    "firstName": "Muhiddin",
+    "lastName": "Qayumov",
+    "gradYear": 2017,
+    "image": "/images/2017/filler.jpg",
+    "isTeacher": false
+  },
+  {
+    "firstName": "Behruz",
+    "lastName": "Qodirxanov",
+    "gradYear": 2017,
+    "image": "/images/2017/filler.jpg",
+    "isTeacher": false
+  },
+  {
+    "firstName": "Komiljon",
+    "lastName": "Rahimjanov",
+    "gradYear": 2017,
+    "image": "/images/2017/filler.jpg",
+    "isTeacher": false
+  },
+  {
+    "firstName": "Ulug'bek",
+    "lastName": "Tohirjanov",
+    "gradYear": 2017,
+    "image": "/images/2017/filler.jpg",
+    "isTeacher": false
+  },
+  {
+    "firstName": "Shaxriyor",
+    "lastName": "Toshpo'latov",
+    "gradYear": 2017,
+    "image": "/images/2017/filler.jpg",
+    "isTeacher": false
+  },
+  {
+    "firstName": "Shohjahon",
+    "lastName": "Toshtemirov",
+    "gradYear": 2017,
+    "image": "/images/2017/filler.jpg",
+    "isTeacher": false
+  },
+  {
+    "firstName": "Ismoil",
+    "lastName": "Tusunov",
+    "gradYear": 2017,
+    "image": "/images/2017/filler.jpg",
+    "isTeacher": false
+  },
+  {
+    "firstName": "Temur",
+    "lastName": "Umurzaqov",
+    "gradYear": 2017,
+    "image": "/images/2017/filler.jpg",
+    "isTeacher": false
+  }
+]
