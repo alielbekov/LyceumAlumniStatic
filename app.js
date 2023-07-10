@@ -5,12 +5,17 @@ const bodyParser = require("body-parser");
 const path = require('path');
 const ejs = require('ejs');
 const mongoose = require('mongoose');
+const alumni_bot = require('./alumni_bot');
+
 
 
 
 
 // Use the User and CommunityGallery models as needed in your application
 // ...
+
+
+alumni_bot.launch();
 
 
 mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_KEY}@cluster0.mjlk1.mongodb.net/lyceum?retryWrites=true&w=majority/`, { useNewUrlParser: true, useUnifiedTopology: true, writeConcern: { w: 'majority', j: true, wtimeout: 1000 } })
@@ -41,7 +46,7 @@ mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_KEY}
   //TEMP
   const user = { name: 'John Doe' };
   const messages = ['Hello', 'Good Morning', 'How are you?'];
-  const years = ['2020', '2021', '2022', '2023'];  // Array of years
+  const years = ['2017','2018','2019','2020','2021','2022','2023',];  // Array of years
   const images = ['/images/Ali.jpg', '/images/Jonibek.jpg', '/images/Kamoliddin.jpg','/images/Ali.jpg', '/images/Jonibek.jpg', '/images/Kamoliddin.jpg'];  // Array of image filenames
 
    
@@ -70,7 +75,7 @@ mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_KEY}
     .then((students) => {
       // nonTeachers is an array of documents matching the query
       // Render the 'year' view with the non-teachers data
-      res.render('index', { years: years, cards: students });
+      res.render('index', { years: years, cards: students, year: year });
     })
     .catch((error) => {
       console.error('Error fetching non-teachers:', error);

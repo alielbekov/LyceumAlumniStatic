@@ -1,15 +1,24 @@
-<header>
-    <nav>
-      <div class="d-flex justify-content-between align-items-center">
-        <a class="btn btn-primary" href="/">Home</a>
-        <ul class="list-unstyled d-flex gap-2">
-            <% years.forEach(year => { %>
-              <li><a class="btn btn-primary year" href="/<%= year %>"><%= year %></a></li>
-            <% }); %>
-        </ul>
-          
-        <a class="btn btn-primary" href="/teachers">Teachers</a>
-      </div>
-    </nav>
-  </header>
-  
+<header class="header">
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <a class="navbar-brand" href="/">Alumni Website</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav">
+        <% years.forEach(year => { %>
+          <% if(year == 2017) { %>
+            <li class="nav-item active">
+              <a class="nav-link btn btn-dark year" href="/<%= year %>"><%= year %></a>
+            </li>
+          <% } else { %>
+            <li class="nav-item">
+              <a class="nav-link btn btn-secondary year" href="/<%= year %>"><%= year %></a>
+            </li>
+          <% } %>
+        <% }); %> 
+      </ul>
+    </div>
+  </nav>
+</header>
