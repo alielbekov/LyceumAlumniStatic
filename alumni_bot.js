@@ -146,24 +146,6 @@ alumni_bot.on("text", (ctx) => {
           ctx.reply("Please enter a valid last name:");
         }
         break;
-      case "awaitingImage":
-        // Check if the message contains an image
-        console.log("ctx");
-        if (ctx.message.photo) {
-          // Get the file ID of the largest photo
-          const imageFileId =
-            ctx.message.photo[ctx.message.photo.length - 1].file_id;
-          // Store the image file ID in the session
-          ctx.session.imageFileId = imageFileId;
-          // Ask for the user's graduate year
-          ctx.reply("Please enter your graduate year:");
-          // Set the bot's state to 'awaitingGraduateYear'
-          ctx.session.state = "awaitingGraduateYear";
-        } else {
-          // Ask the user to provide a valid image
-          ctx.reply("Please send a valid image:");
-        }
-        break;
       case "awaitingGraduateYear":
         // Validate the graduate year
         const graduateYear = parseInt(message);
@@ -191,6 +173,32 @@ alumni_bot.on("text", (ctx) => {
           ctx.reply("Please enter a valid graduate year:");
         }
         break;
+    }
+  } else {
+    // Reply with an error message if the chat is not authorized
+    ctx.reply("Unauthorized access.");
+  }
+});
+alumni_bot.on("photo", (ctx) => {
+  // Check if the chat ID is authorized
+  if (isChatAuthorized(ctx.chat.id)) {
+    const state = ctx.session.state;
+
+    if (state === "awaitingImage") {
+      // Get the file ID of the largest photo
+      const imageFileId =
+        ctx.message.photo[ctx.message.photo.length - 1].file_id;
+      // Store the image file ID in the session
+      ctx.session.userDetails.imageFileId = imageFileId;
+      // Ask for the user's graduate year
+      ctx.reply("Please enter your graduate year:");
+      // Set the bot's state to 'awaitingGraduateYear'
+      ctx.session.state = "awaitingGraduateYear";
+    } else {
+      // Reply with an error message if photo received in the wrong state
+      ctx.reply(
+        "Unexpected photo received. Please follow the conversation flow."
+      );
     }
   } else {
     // Reply with an error message if the chat is not authorized
