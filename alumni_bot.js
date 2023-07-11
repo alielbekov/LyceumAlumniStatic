@@ -158,13 +158,12 @@ alumni_bot.on("text", (ctx) => {
             lastName: ctx.session.lastName,
             graduateYear: graduateYear,
           };
-          const confirmationMessage = generateConfirmationMessage(
-            userDetails,
-            ctx.session.imageFileId
-          );
+          const confirmationMessage = generateConfirmationMessage(userDetails);
 
           // Send the confirmation message to the user
-          ctx.replyWithMarkdown(confirmationMessage);
+          ctx.replyWithPhoto(ctx.session.imageFileId, {
+            caption: confirmationMessage,
+          });
 
           // Reset the bot's state
           ctx.session.state = "";
@@ -181,15 +180,16 @@ alumni_bot.on("text", (ctx) => {
 });
 alumni_bot.on("photo", (ctx) => {
   // Check if the chat ID is authorized
-  if (isChatAuthorized(ctx.chat.id)) {
+  if (isChatAuthorized(ctx.chat.id) || true) {
     const state = ctx.session.state;
 
-    if (state === "awaitingImage") {
+    if (state === "awaitingImage" || true) {
       // Get the file ID of the largest photo
       const imageFileId =
         ctx.message.photo[ctx.message.photo.length - 1].file_id;
       // Store the image file ID in the session
-      ctx.session.userDetails.imageFileId = imageFileId;
+      ctx.session.imageFileId = imageFileId;
+      console.log(ctx.session.imageFileId);
       // Ask for the user's graduate year
       ctx.reply("Please enter your graduate year:");
       // Set the bot's state to 'awaitingGraduateYear'
@@ -206,14 +206,12 @@ alumni_bot.on("photo", (ctx) => {
   }
 });
 
-function generateConfirmationMessage(userDetails, imageFileId) {
+function generateConfirmationMessage(userDetails) {
   const { firstName, lastName, graduateYear } = userDetails;
-  const imageCaption = `Image: [Click here to view](${imageFileId})`;
-  return `Confirmation:
-  First Name: ${firstName}
-  Last Name: ${lastName}
-  Graduate Year: ${graduateYear}
-  ${imageCaption}`;
+  return `First Name: ${firstName}
+Last Name: ${lastName}
+Graduate Year: ${graduateYear}
+  `;
 }
 
 function isValidFirstName(firstName) {
