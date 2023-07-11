@@ -9,9 +9,10 @@
       Class of <%= year %>
     </div>
     <div class="card-grid d-flex justify-content-evenly flex-wrap">
-      <% cards.forEach(card => { %>
+      <% cards.forEach((card, index) => { %>
         <div class="card d-flex align-items-stretch">
-            <img src="<%= card.image %>" class="card-img-top" alt="<%= card.firstName %> <%= card.lastName %>" onerror="this.onerror=null; this.src='/images/rules.png';">
+            <img src="<%= card.image %>" class="card-img-top" alt="<%= card.firstName %> <%= card.lastName %>" onerror="this.onerror=null; this.src='/images/rules.png';"
+            id="image<%= index %>" onclick="openModal('<%= card.image %>')">
             <div class="card-body">
                 <p class="card-title text-white"><%= card.firstName %> <br> <%= card.lastName %></p>
                 <p class="card-text"><%= card.text %></p>
@@ -19,6 +20,14 @@
         </div>
     <% }); %>
     
+    </div>
+  </div>
+  
+  <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <img id="modalImage" class="modal-img-top" alt="Modal Image">
+      </div>
     </div>
   </div>
 </main>

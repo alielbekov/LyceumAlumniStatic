@@ -20,7 +20,9 @@ body {
     -webkit-backdrop-filter: blur(10px); /* For Safari */
     border-bottom: 1px solid rgba(221, 201, 66, 0.3); /* Optional: adds a subtle border */
   }
-  
+.navbar-brand{
+    color: white;
+}  
 
 .year{
     
