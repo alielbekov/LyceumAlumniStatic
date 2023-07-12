@@ -94,7 +94,7 @@ alumni_bot.command("fact", (ctx) => {
 alumni_bot.command("addalumnus", (ctx) => {
   ctx.session ??= {};
   // Check if the chat ID is authorized
-  if (isChatAuthorized(ctx.chat.id) || true) {
+  if (isChatAuthorized(ctx.chat.id)) {
     // Send a welcome message and ask for the user's first name
     ctx.reply(
       "Welcome! Please provide your details.\n\nPlease enter your first name:"
@@ -107,51 +107,38 @@ alumni_bot.command("addalumnus", (ctx) => {
   }
 });
 
-// Authentication function
-function isChatAuthorized(chatId) {
-  return authorizedChatIds.includes(chatId);
-}
-alumni_bot.on("text", (ctx) => {
+
+alumni_bot.on("text", async (ctx) => {
+  console.log("year "+isValidGraduateYear(ctx.message.text));
   // Check if the chat ID is authorized
-  if (isChatAuthorized(ctx.chat.id) || true) {
+  //isChatAuthorized(ctx.chat.id)
+  if (ctx.session && ctx.session.state) {
     const state = ctx.session.state;
     const message = ctx.message.text;
 
     switch (state) {
       case "awaitingFirstName":
-        // Validate the first name
+
         if (isValidFirstName(message)) {
-          // Store the first name in the session
           ctx.session.firstName = message;
-          // Ask for the user's last name
           ctx.reply("Please enter your last name:");
-          // Set the bot's state to 'awaitingLastName'
           ctx.session.state = "awaitingLastName";
         } else {
-          // Ask the user to provide a valid first name
           ctx.reply("Please enter a valid first name:");
         }
         break;
       case "awaitingLastName":
-        // Validate the last name
         if (isValidLastName(message)) {
-          // Store the last name in the session
           ctx.session.lastName = message;
-          // Ask for the user's image
           ctx.reply("Please send me your image:");
-          // Set the bot's state to 'awaitingImage'
           ctx.session.state = "awaitingImage";
         } else {
-          // Ask the user to provide a valid last name
           ctx.reply("Please enter a valid last name:");
         }
         break;
       case "awaitingGraduateYear":
-        // Validate the graduate year
         const graduateYear = parseInt(message);
         if (isValidGraduateYear(graduateYear)) {
-          // Perform the necessary validation and POST request to the API here
-          // If successful, store the user object in MongoDB
 
           const userDetails = {
             firstName: ctx.session.firstName,
@@ -160,51 +147,80 @@ alumni_bot.on("text", (ctx) => {
           };
           const confirmationMessage = generateConfirmationMessage(userDetails);
 
-          // Send the confirmation message to the user
-          ctx.replyWithPhoto(ctx.session.imageFileId, {
+          await ctx.replyWithPhoto(ctx.session.imageFileId, {
             caption: confirmationMessage,
           });
+          await ctx.replyWithPoll('Do you approve?', ['Approve ✔', 'Disapprove ❌'], { is_anonymous: false });
 
-          // Reset the bot's state
-          ctx.session.state = "";
         } else {
-          // Ask the user to provide a valid graduate year
           ctx.reply("Please enter a valid graduate year:");
         }
         break;
     }
   } else {
-    // Reply with an error message if the chat is not authorized
-    ctx.reply("Unauthorized access.");
+    //ctx.reply("Unauthorized access.");
   }
 });
-alumni_bot.on("photo", (ctx) => {
-  // Check if the chat ID is authorized
+
+alumni_bot.on("photo", async (ctx) => {
   if (isChatAuthorized(ctx.chat.id) || true) {
     const state = ctx.session.state;
 
     if (state === "awaitingImage" || true) {
-      // Get the file ID of the largest photo
-      const imageFileId =
-        ctx.message.photo[ctx.message.photo.length - 1].file_id;
-      // Store the image file ID in the session
-      ctx.session.imageFileId = imageFileId;
-      console.log(ctx.session.imageFileId);
-      // Ask for the user's graduate year
-      ctx.reply("Please enter your graduate year:");
-      // Set the bot's state to 'awaitingGraduateYear'
-      ctx.session.state = "awaitingGraduateYear";
+      // Validate the image
+      if (await isValidImage(ctx, 200000)) { // Max size: 200KB
+        const imageFileId =
+          ctx.message.photo[ctx.message.photo.length - 1].file_id;
+        // Store the image file ID in the session
+        ctx.session.imageFileId = imageFileId;
+        console.log(ctx.session.imageFileId);
+
+        ctx.reply("Please enter your graduate year:");     
+        ctx.session.state = "awaitingGraduateYear";
+      } else {
+        ctx.reply("The image is invalid. Currently, we cannot support large files. Use your profile image please.");
+      }
     } else {
-      // Reply with an error message if photo received in the wrong state
-      ctx.reply(
-        "Unexpected photo received. Please follow the conversation flow."
-      );
+      // Do nothing
     }
   } else {
-    // Reply with an error message if the chat is not authorized
-    ctx.reply("Unauthorized access.");
+    //ctx.reply("Unauthorized access.");
   }
 });
+
+alumni_bot.on('poll_answer', (ctx) => {
+  console.log(ctx.session);
+  //ctx.session.pollResults ??= { '0': 0, '1': 0 }; // Initialize poll results
+
+  const user = ctx.update.poll_answer.user;
+  const chosenOptions = ctx.update.poll_answer.option_ids;
+
+  // Increment the count for the chosen option
+  for (let option of chosenOptions) {
+    ctx.session.pollResults[option]++;
+  }
+
+  const totalVotes = ctx.session.pollResults['0'] + ctx.session.pollResults['1'];
+
+  if (totalVotes >= 11) {
+    // If at least 11 answers have been received, determine the majority
+    let result;
+    if (ctx.session.pollResults['0'] > ctx.session.pollResults['1']) {
+      result = 'The majority approved.';
+      ctx.session = "";
+    } else {
+      result = 'The majority disapproved.';
+      ctx.session = "";
+    }
+
+    ctx.reply(result);
+    // Clear poll results
+    ctx.session.pollResults = { '0': 0, '1': 0 };
+  }
+  console.log(ctx.session.pollResults);
+});
+
+
 
 function generateConfirmationMessage(userDetails) {
   const { firstName, lastName, graduateYear } = userDetails;
@@ -215,15 +231,40 @@ Graduate Year: ${graduateYear}
 }
 
 function isValidFirstName(firstName) {
-  return true;
+
+  const regex = /^[A-Za-z]+$/;
+  return regex.test(firstName);
 }
 
 function isValidLastName(lastName) {
-  return true;
+
+  const regex = /^[A-Za-z]+$/;
+  return regex.test(lastName);
 }
 
 function isValidGraduateYear(gradYear) {
+
+    const regex = /^(201[7-9]|202[0-1])$/;
+    return regex.test(gradYear);
+}
+
+
+async function isValidImage(ctx, maxSize) {
+  const fileId = ctx.message.photo[ctx.message.photo.length - 1].file_id;
+  const fileDetails = await ctx.telegram.getFile(fileId);
+  console.log(fileDetails);
+  if (fileDetails.file_size > maxSize) {
+    return false;
+  }
+  
+  // For more advanced validations like image dimensions you might need to download the image
+
   return true;
+}
+
+// Authentication function
+function isChatAuthorized(chatId) {
+  return authorizedChatIds.includes(chatId);
 }
 
 module.exports = alumni_bot;

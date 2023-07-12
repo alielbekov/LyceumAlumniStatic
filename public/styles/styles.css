@@ -89,9 +89,7 @@ body {
     text-shadow: 0 0 10px #fcca26, 0 0 20px #fcca26, 0 0 30px #fcca26, 0 0 40px #fcca26;
   }
   
-  main{
-
-   
+  main{ 
     min-height: calc(100vh - 56px);
     display: flex;
     flex-direction: column;
