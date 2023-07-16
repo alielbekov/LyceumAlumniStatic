@@ -58,17 +58,16 @@ const images = [
 
 // Define a route handler for GET requests made to the root path
 app.get("/", (req, res) => {
-  res.render("index", { years: years, cards: [], year: null });
+  res.render("index", { years: years, page:"landing" });
 });
 
 app.get("/resources", (req, res) => {
-  // your code here, e.g.,:
-  res.render("resources");
+  res.render("index", { years: years, page: "resources" });
 });
 
 app.get("/teachers", (req, res) => {
   // your code here, e.g.,:
-  res.render("index", { years: years, cards: [] });
+  res.render("index", { years: years, page:"teachers" });
 });
 
 app.get("/:year", (req, res) => {
@@ -78,7 +77,9 @@ app.get("/:year", (req, res) => {
     .then((students) => {
       // nonTeachers is an array of documents matching the query
       // Render the 'year' view with the non-teachers data
-      res.render("index", { years: years, cards: students, year: year });
+      console.log(students);
+      res.render("index", { years: years, cards: students, year: year, page:"main" });
+
     })
     .catch((error) => {
       console.error("Error fetching non-teachers:", error);
