@@ -58,16 +58,16 @@ const images = [
 
 // Define a route handler for GET requests made to the root path
 app.get("/", (req, res) => {
-  res.render("index", { years: years, page:"landing" });
+  res.render("index", { years: years, page:"landing", year: null });
 });
 
 app.get("/resources", (req, res) => {
-  res.render("index", { years: years, page: "resources" });
+  res.render("index", { years: years, page: "resources", year: null });
 });
 
 app.get("/teachers", (req, res) => {
   // your code here, e.g.,:
-  res.render("index", { years: years, page:"teachers" });
+  res.render("index", { years: years, page:"teachers", year: null });
 });
 
 app.get("/:year", (req, res) => {

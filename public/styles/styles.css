@@ -94,3 +94,6 @@ body {
     display: flex;
     flex-direction: column;
   }
+  .footer-copy{
+    text-align: center;
+  }

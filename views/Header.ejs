@@ -7,17 +7,12 @@
     </button>
     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
       <ul class="navbar-nav">
-        <% years.forEach(year => { %>
-          <% if(year == 2017) { %>
-            <li class="nav-item active">
-              <a class="nav-link btn btn-dark year" href="/<%= year %>"><%= year %></a>
-            </li>
-          <% } else { %>
-            <li class="nav-item">
-              <a class="nav-link btn btn-secondary year" href="/<%= year %>"><%= year %></a>
-            </li>
-          <% } %>
-        <% }); %> 
+        <% years.forEach(navYear => { %>
+          <li class="nav-item">
+            <a class="nav-link btn btn-secondary year text-white<%= (navYear === year) ? ' active' : '' %>"
+              href="/<%= navYear %>"><%= navYear %></a>
+          </li>
+        <% }); %>
       </ul>
     </div>
   </nav>
