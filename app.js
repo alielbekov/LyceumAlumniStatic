@@ -45,16 +45,7 @@ app.set("views", path.join(__dirname, "/views"));
 
 //TEMP
 const user = { name: "John Doe" };
-const messages = ["Hello", "Good Morning", "How are you?"];
 const years = ["2017", "2018", "2019", "2020", "2021", "2022", "2023"]; // Array of years
-const images = [
-  "/images/Ali.jpg",
-  "/images/Jonibek.jpg",
-  "/images/Kamoliddin.jpg",
-  "/images/Ali.jpg",
-  "/images/Jonibek.jpg",
-  "/images/Kamoliddin.jpg",
-]; // Array of image filenames
 
 // Define a route handler for GET requests made to the root path
 app.get("/", (req, res) => {
@@ -77,7 +68,6 @@ app.get("/:year", (req, res) => {
     .then((students) => {
       // nonTeachers is an array of documents matching the query
       // Render the 'year' view with the non-teachers data
-      console.log(students);
       res.render("index", { years: years, cards: students, year: year, page:"main" });
 
     })

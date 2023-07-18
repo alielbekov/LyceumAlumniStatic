@@ -1,6 +1,7 @@
 // JShint esversion: 6
 const { Telegraf, session } = require("telegraf");
 const request = require("request");
+const e = require("express");
 
 // Change this array to include the chat IDs where you want your new bot to operate
 const authorizedChatIds = [-1001948673440, -1001966916584];
@@ -109,7 +110,7 @@ alumni_bot.command("addalumnus", (ctx) => {
 
 
 alumni_bot.on("text", async (ctx) => {
-  console.log("year "+isValidGraduateYear(ctx.message.text));
+  console.log(ctx);
   // Check if the chat ID is authorized
   //isChatAuthorized(ctx.chat.id)
   if (ctx.session && ctx.session.state) {
@@ -163,10 +164,9 @@ alumni_bot.on("text", async (ctx) => {
 });
 
 alumni_bot.on("photo", async (ctx) => {
-  if (isChatAuthorized(ctx.chat.id) || true) {
+  if (isChatAuthorized(ctx.chat.id) && ctx.session) {
     const state = ctx.session.state;
-
-    if (state === "awaitingImage" || true) {
+    if (state === "awaitingImage") {
       // Validate the image
       if (await isValidImage(ctx, 200000)) { // Max size: 200KB
         const imageFileId =
@@ -178,7 +178,7 @@ alumni_bot.on("photo", async (ctx) => {
         ctx.reply("Please enter your graduate year:");     
         ctx.session.state = "awaitingGraduateYear";
       } else {
-        ctx.reply("The image is invalid. Currently, we cannot support large files. Use your profile image please.");
+        ctx.reply("The image is invalid. Currently, we cannot support large files. Use a telegram profile image please.");
       }
     } else {
       // Do nothing
@@ -188,9 +188,11 @@ alumni_bot.on("photo", async (ctx) => {
   }
 });
 
+
+
 alumni_bot.on('poll_answer', (ctx) => {
   console.log(ctx.session);
-  //ctx.session.pollResults ??= { '0': 0, '1': 0 }; // Initialize poll results
+  ctx.session.pollResults ??= { '0': 0, '1': 0 }; // Initialize poll results
 
   const user = ctx.update.poll_answer.user;
   const chosenOptions = ctx.update.poll_answer.option_ids;
@@ -250,16 +252,18 @@ function isValidGraduateYear(gradYear) {
 
 
 async function isValidImage(ctx, maxSize) {
-  const fileId = ctx.message.photo[ctx.message.photo.length - 1].file_id;
-  const fileDetails = await ctx.telegram.getFile(fileId);
-  console.log(fileDetails);
-  if (fileDetails.file_size > maxSize) {
-    return false;
-  }
-  
-  // For more advanced validations like image dimensions you might need to download the image
-
+  console.log("here", ctx.message.photo);
+  const image = ctx.message.photo[ctx.message.photo.length - 1]
+  const photoWidth = image.width;
+  const photoHeight = image.height;
+  const photoSize = image.file_size;
+  const fileId = image.file_id;
+  // Reality check
+  if(photoSize<maxSize && Math.abs(photoWidth-photoHeight)<10) {
+  console.log(photoWidth, photoHeight, photoSize, fileId);
   return true;
+}
+return false;ctx.message.photo[ctx.message.photo.length - 1]
 }
 
 // Authentication function
