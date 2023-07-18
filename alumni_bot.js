@@ -108,7 +108,6 @@ alumni_bot.command("addalumnus", (ctx) => {
   }
 });
 
-
 alumni_bot.on("text", async (ctx) => {
   console.log(ctx);
   // Check if the chat ID is authorized
@@ -119,7 +118,6 @@ alumni_bot.on("text", async (ctx) => {
 
     switch (state) {
       case "awaitingFirstName":
-
         if (isValidFirstName(message)) {
           ctx.session.firstName = message;
           ctx.reply("Please enter your last name:");
@@ -140,7 +138,6 @@ alumni_bot.on("text", async (ctx) => {
       case "awaitingGraduateYear":
         const graduateYear = parseInt(message);
         if (isValidGraduateYear(graduateYear)) {
-
           const userDetails = {
             firstName: ctx.session.firstName,
             lastName: ctx.session.lastName,
@@ -151,8 +148,13 @@ alumni_bot.on("text", async (ctx) => {
           await ctx.replyWithPhoto(ctx.session.imageFileId, {
             caption: confirmationMessage,
           });
-          await ctx.replyWithPoll('Do you approve?', ['Approve ✔', 'Disapprove ❌'], { is_anonymous: false });
-
+          await ctx.replyWithPoll(
+            "Do you approve?",
+            ["Approve ✔", "Disapprove ❌"],
+            { is_anonymous: false }
+          );
+          ctx.session.state = "awaitingApproval";
+          console.log(ctx.session);
         } else {
           ctx.reply("Please enter a valid graduate year:");
         }
@@ -168,17 +170,20 @@ alumni_bot.on("photo", async (ctx) => {
     const state = ctx.session.state;
     if (state === "awaitingImage") {
       // Validate the image
-      if (await isValidImage(ctx, 200000)) { // Max size: 200KB
+      if (await isValidImage(ctx, 200000)) {
+        // Max size: 200KB
         const imageFileId =
           ctx.message.photo[ctx.message.photo.length - 1].file_id;
         // Store the image file ID in the session
         ctx.session.imageFileId = imageFileId;
         console.log(ctx.session.imageFileId);
 
-        ctx.reply("Please enter your graduate year:");     
+        ctx.reply("Please enter your graduate year:");
         ctx.session.state = "awaitingGraduateYear";
       } else {
-        ctx.reply("The image is invalid. Currently, we cannot support large files. Use a telegram profile image please.");
+        ctx.reply(
+          "The image is invalid. Currently, we cannot support large files. Use a telegram profile image please."
+        );
       }
     } else {
       // Do nothing
@@ -188,11 +193,10 @@ alumni_bot.on("photo", async (ctx) => {
   }
 });
 
-
-
-alumni_bot.on('poll_answer', (ctx) => {
-  console.log(ctx.session);
-  ctx.session.pollResults ??= { '0': 0, '1': 0 }; // Initialize poll results
+alumni_bot.on("poll_answer", async (ctx) => {
+  console.log(ctx);
+  /*
+  ctx.session.pollResults ??= { 0: 0, 1: 0 }; // Initialize poll results
 
   const user = ctx.update.poll_answer.user;
   const chosenOptions = ctx.update.poll_answer.option_ids;
@@ -202,27 +206,27 @@ alumni_bot.on('poll_answer', (ctx) => {
     ctx.session.pollResults[option]++;
   }
 
-  const totalVotes = ctx.session.pollResults['0'] + ctx.session.pollResults['1'];
+  const totalVotes =
+    ctx.session.pollResults["0"] + ctx.session.pollResults["1"];
 
   if (totalVotes >= 11) {
     // If at least 11 answers have been received, determine the majority
     let result;
-    if (ctx.session.pollResults['0'] > ctx.session.pollResults['1']) {
-      result = 'The majority approved.';
+    if (ctx.session.pollResults["0"] > ctx.session.pollResults["1"]) {
+      result = "The majority approved.";
       ctx.session = "";
     } else {
-      result = 'The majority disapproved.';
+      result = "The majority disapproved.";
       ctx.session = "";
     }
 
     ctx.reply(result);
     // Clear poll results
-    ctx.session.pollResults = { '0': 0, '1': 0 };
+    ctx.session.pollResults = { 0: 0, 1: 0 };
   }
   console.log(ctx.session.pollResults);
+  */
 });
-
-
 
 function generateConfirmationMessage(userDetails) {
   const { firstName, lastName, graduateYear } = userDetails;
@@ -233,37 +237,34 @@ Graduate Year: ${graduateYear}
 }
 
 function isValidFirstName(firstName) {
-
   const regex = /^[A-Za-z]+$/;
   return regex.test(firstName);
 }
 
 function isValidLastName(lastName) {
-
   const regex = /^[A-Za-z]+$/;
   return regex.test(lastName);
 }
 
 function isValidGraduateYear(gradYear) {
-
-    const regex = /^(201[7-9]|202[0-1])$/;
-    return regex.test(gradYear);
+  const regex = /^(201[7-9]|202[0-1])$/;
+  return regex.test(gradYear);
 }
-
 
 async function isValidImage(ctx, maxSize) {
   console.log("here", ctx.message.photo);
-  const image = ctx.message.photo[ctx.message.photo.length - 1]
+  const image = ctx.message.photo[ctx.message.photo.length - 1];
   const photoWidth = image.width;
   const photoHeight = image.height;
   const photoSize = image.file_size;
   const fileId = image.file_id;
   // Reality check
-  if(photoSize<maxSize && Math.abs(photoWidth-photoHeight)<10) {
-  console.log(photoWidth, photoHeight, photoSize, fileId);
-  return true;
-}
-return false;ctx.message.photo[ctx.message.photo.length - 1]
+  if (photoSize < maxSize && Math.abs(photoWidth - photoHeight) < 10) {
+    console.log(photoWidth, photoHeight, photoSize, fileId);
+    return true;
+  }
+  return false;
+  ctx.message.photo[ctx.message.photo.length - 1];
 }
 
 // Authentication function
