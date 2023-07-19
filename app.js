@@ -30,6 +30,7 @@ mongoose
 
 const User = require("./models/user");
 const CommunityGallery = require("./models/community-gallery");
+const Poll = require("./models/poll");
 
 // Create an instance of express
 const app = express();
@@ -88,6 +89,16 @@ app.get("/:year/community", (req, res) => {
 app.use(function (req, res, next) {
   res.status(404).send("Sorry, that route doesn't exist.");
 });
+
+
+const checkAuth = (req, res, next) => {
+  const token = req.headers.authorization;
+  if (token !== process.env.SECRET_TOKEN) {
+    res.status(401).send('Unauthorized: Invalid token');
+  } else {
+    next();
+  }
+};
 
 // Start the server on port 3000
 app.listen(3000, () => {

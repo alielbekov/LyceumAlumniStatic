@@ -2,6 +2,8 @@
 const { Telegraf, session } = require("telegraf");
 const request = require("request");
 const e = require("express");
+const Poll = require("./models/poll");
+
 
 // Change this array to include the chat IDs where you want your new bot to operate
 const authorizedChatIds = [-1001948673440, -1001966916584];
@@ -47,7 +49,6 @@ alumni_bot.command("quote", (ctx) => {
           ctx.reply("Failed to fetch a quote. Please try again.");
         } else {
           const quoteData = JSON.parse(body);
-          console.log(quoteData);
           const quote = quoteData[Math.floor(Math.random() * quoteData.length)];
           ctx.reply(`"${quote.quote}" - ${quote.author}`);
         }
@@ -81,7 +82,6 @@ alumni_bot.command("fact", (ctx) => {
           ctx.reply("Failed to fetch a quote. Please try again.");
         } else {
           const factData = JSON.parse(body);
-          console.log(factData);
           const fact = factData[Math.floor(Math.random() * factData.length)];
           ctx.reply(`"${fact.fact}" - api-ninja`);
         }
@@ -109,7 +109,6 @@ alumni_bot.command("addalumnus", (ctx) => {
 });
 
 alumni_bot.on("text", async (ctx) => {
-  console.log(ctx);
   // Check if the chat ID is authorized
   //isChatAuthorized(ctx.chat.id)
   if (ctx.session && ctx.session.state) {
@@ -148,13 +147,23 @@ alumni_bot.on("text", async (ctx) => {
           await ctx.replyWithPhoto(ctx.session.imageFileId, {
             caption: confirmationMessage,
           });
-          await ctx.replyWithPoll(
+
+          console.log(ctx.session);
+          let poll = new Poll({
+            fName: userDetails.firstName,
+            lName: userDetails.lastName,
+            gradYear: userDetails.graduateYear,
+            creatorID: ctx.from.id,
+            imageID: ctx.session.imageFileId,
+        });
+          const pollMessage = await ctx.replyWithPoll(
             "Do you approve?",
             ["Approve ✔", "Disapprove ❌"],
-            { is_anonymous: false }
+            { is_anonymous: false, close_period: 300 }
           );
-          ctx.session.state = "awaitingApproval";
-          console.log(ctx.session);
+          poll.pollID=pollMessage.poll.id;
+          console.log(poll);
+          ctx.session.state = "";
         } else {
           ctx.reply("Please enter a valid graduate year:");
         }
@@ -176,7 +185,6 @@ alumni_bot.on("photo", async (ctx) => {
           ctx.message.photo[ctx.message.photo.length - 1].file_id;
         // Store the image file ID in the session
         ctx.session.imageFileId = imageFileId;
-        console.log(ctx.session.imageFileId);
 
         ctx.reply("Please enter your graduate year:");
         ctx.session.state = "awaitingGraduateYear";
@@ -194,7 +202,7 @@ alumni_bot.on("photo", async (ctx) => {
 });
 
 alumni_bot.on("poll_answer", async (ctx) => {
-  console.log(ctx);
+  
   /*
   ctx.session.pollResults ??= { 0: 0, 1: 0 }; // Initialize poll results
 
@@ -252,7 +260,6 @@ function isValidGraduateYear(gradYear) {
 }
 
 async function isValidImage(ctx, maxSize) {
-  console.log("here", ctx.message.photo);
   const image = ctx.message.photo[ctx.message.photo.length - 1];
   const photoWidth = image.width;
   const photoHeight = image.height;
@@ -260,11 +267,9 @@ async function isValidImage(ctx, maxSize) {
   const fileId = image.file_id;
   // Reality check
   if (photoSize < maxSize && Math.abs(photoWidth - photoHeight) < 10) {
-    console.log(photoWidth, photoHeight, photoSize, fileId);
     return true;
   }
   return false;
-  ctx.message.photo[ctx.message.photo.length - 1];
 }
 
 // Authentication function
