@@ -1,10 +1,9 @@
 // JShint esversion: 6
+require("dotenv").config();
 const { Telegraf, session } = require("telegraf");
 const request = require("request");
 const e = require("express");
 const Poll = require("./models/poll");
-
-
 // Change this array to include the chat IDs where you want your new bot to operate
 const authorizedChatIds = [-1001948673440, -1001966916584];
 
@@ -148,21 +147,44 @@ alumni_bot.on("text", async (ctx) => {
             caption: confirmationMessage,
           });
 
-          console.log(ctx.session);
           let poll = new Poll({
             fName: userDetails.firstName,
             lName: userDetails.lastName,
             gradYear: userDetails.graduateYear,
             creatorID: ctx.from.id,
             imageID: ctx.session.imageFileId,
-        });
+          });
           const pollMessage = await ctx.replyWithPoll(
             "Do you approve?",
             ["Approve ✔", "Disapprove ❌"],
-            { is_anonymous: false, close_period: 300 }
+            { is_anonymous: false, open_period: 300 }
           );
-          poll.pollID=pollMessage.poll.id;
-          console.log(poll);
+          poll.pollID = pollMessage.poll.id;
+
+          const requestOptions = {
+            method: "POST",
+            uri: "http://localhost:3000/poll", // Update the URL to your server's endpoint
+            body: poll,
+            json: true,
+            headers: {
+              Authorization: process.env.POST_POLL_API_KEY, // Replace with your API key
+            },
+          };
+
+          //Make request with poll body
+          try {
+            request(requestOptions, (error, response, body) => {
+              if (error) {
+                console.error("Error making the POST request:", error);
+              } else {
+                console.log(body); // Log the response body from your server
+              }
+            });
+          } catch (error) {
+            console.error("Error making the POST request:", error);
+          }
+
+          // Clear the session state
           ctx.session.state = "";
         } else {
           ctx.reply("Please enter a valid graduate year:");
@@ -202,38 +224,32 @@ alumni_bot.on("photo", async (ctx) => {
 });
 
 alumni_bot.on("poll_answer", async (ctx) => {
-  
-  /*
-  ctx.session.pollResults ??= { 0: 0, 1: 0 }; // Initialize poll results
-
+  const pollId = ctx.update.poll_answer.poll_id;
   const user = ctx.update.poll_answer.user;
-  const chosenOptions = ctx.update.poll_answer.option_ids;
-
-  // Increment the count for the chosen option
-  for (let option of chosenOptions) {
-    ctx.session.pollResults[option]++;
-  }
-
-  const totalVotes =
-    ctx.session.pollResults["0"] + ctx.session.pollResults["1"];
-
-  if (totalVotes >= 11) {
-    // If at least 11 answers have been received, determine the majority
-    let result;
-    if (ctx.session.pollResults["0"] > ctx.session.pollResults["1"]) {
-      result = "The majority approved.";
-      ctx.session = "";
-    } else {
-      result = "The majority disapproved.";
-      ctx.session = "";
+  const chosenOption = ctx.update.poll_answer.option_ids[0];
+  if (isUserInGroup(user)) {
+    const requestOptions = {
+      method: "POST",
+      uri: "http://localhost:8080/update-poll", // Update the URL to your server's endpoint
+      body: { pollId: pollId, option: chosenOption },
+      json: true,
+      headers: {
+        Authorization: process.env.POST_POLL_API_KEY, // Replace with your API key
+      },
+    };
+    //Make request with poll option
+    try {
+      request(requestOptions, (error, response, body) => {
+        if (error) {
+          console.error("Error making the POST request:", error);
+        } else {
+          console.log(body); // Log the response body from your server
+        }
+      });
+    } catch (error) {
+      console.error("Error making the POST request:", error);
     }
-
-    ctx.reply(result);
-    // Clear poll results
-    ctx.session.pollResults = { 0: 0, 1: 0 };
   }
-  console.log(ctx.session.pollResults);
-  */
 });
 
 function generateConfirmationMessage(userDetails) {
@@ -275,6 +291,11 @@ async function isValidImage(ctx, maxSize) {
 // Authentication function
 function isChatAuthorized(chatId) {
   return authorizedChatIds.includes(chatId);
+}
+
+function isUserInGroup(userID) {
+  //Do smth
+  return true;
 }
 
 module.exports = alumni_bot;

@@ -1,4 +1,4 @@
-// Import the necessary modules
+ add // Import the necessary modules
 require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -7,8 +7,7 @@ const ejs = require("ejs");
 const mongoose = require("mongoose");
 const alumni_bot = require("./alumni_bot");
 
-// Use the User and CommunityGallery models as needed in your application
-// ...
+const allowedKeys = [process.env.POST_POLL_API_KEY];
 
 alumni_bot.launch();
 
@@ -38,6 +37,7 @@ const app = express();
 // Set the view engine to ejs
 app.set("view engine", "ejs");
 
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -50,7 +50,7 @@ const years = ["2017", "2018", "2019", "2020", "2021", "2022", "2023"]; // Array
 
 // Define a route handler for GET requests made to the root path
 app.get("/", (req, res) => {
-  res.render("index", { years: years, page:"landing", year: null });
+  res.render("index", { years: years, page: "landing", year: null });
 });
 
 app.get("/resources", (req, res) => {
@@ -59,7 +59,7 @@ app.get("/resources", (req, res) => {
 
 app.get("/teachers", (req, res) => {
   // your code here, e.g.,:
-  res.render("index", { years: years, page:"teachers", year: null });
+  res.render("index", { years: years, page: "teachers", year: null });
 });
 
 app.get("/:year", (req, res) => {
@@ -69,8 +69,12 @@ app.get("/:year", (req, res) => {
     .then((students) => {
       // nonTeachers is an array of documents matching the query
       // Render the 'year' view with the non-teachers data
-      res.render("index", { years: years, cards: students, year: year, page:"main" });
-
+      res.render("index", {
+        years: years,
+        cards: students,
+        year: year,
+        page: "main",
+      });
     })
     .catch((error) => {
       console.error("Error fetching non-teachers:", error);
@@ -85,22 +89,74 @@ app.get("/:year/community", (req, res) => {
   res.render("community", { year: year });
 });
 
+const checkAuth = (req, res, next) => {
+  const apiKey = req.headers.authorization;
+  if (!apiKey || !allowedKeys.includes(apiKey)) {
+    return res.status(401).send("Unauthorized: Invalid API key");
+  }
+  next();
+};
+
+app.post("/poll", checkAuth, (req, res) => {
+  // Your code for handling the POST request
+  const pollData = req.body;
+  Poll.findOne({ fName: pollData.fName, lName: pollData.lName })
+    .then((existingPoll) => {
+      if (existingPoll) {
+        // A poll with the same name already exists, do not add a new one
+
+        return res.status(400).send("Poll with the same name already exists");
+      } else {
+        // No existing poll found, add the new poll to the database
+        const poll = new Poll({
+          fName: pollData.fName,
+          lName: pollData.lName,
+          gradYear: pollData.gradYear,
+          creatorID: pollData.creatorID,
+          imageID: pollData.imageID,
+          pollID: pollData.pollID,
+          approveCount: pollData.approveCount,
+          disapproveCount: pollData.disapproveCount,
+        });
+
+        // Save the new poll to the database
+        poll
+          .save()
+          .then((savedPoll) => {
+            res.status(200).send("New poll added to the database");
+          })
+          .catch((error) => {
+            res.status(500).send("Internal Server Error");
+          });
+      }
+    })
+    .catch((error) => {
+      res.status(500).send("Internal Server Error");
+    });
+  console.log("Damn That works!");
+});
+
+app.post("/update-poll", checkAuth, (req, res) => {
+  const updateBody = req.body;
+  console.log("ACCEPTED");
+  console.log(updateBody);
+  /*{
+    pollId: 12312313131,
+    option: 1
+  }*/
+
+  /*{
+    pollId: 12312313131,
+    option: 1
+  }*/
+});
+
 // 404 for all other routes
 app.use(function (req, res, next) {
   res.status(404).send("Sorry, that route doesn't exist.");
 });
 
-
-const checkAuth = (req, res, next) => {
-  const token = req.headers.authorization;
-  if (token !== process.env.SECRET_TOKEN) {
-    res.status(401).send('Unauthorized: Invalid token');
-  } else {
-    next();
-  }
-};
-
 // Start the server on port 3000
-app.listen(3000, () => {
+app.listen(8080, () => {
   console.log("Server is running on http://localhost:3000");
 });
