@@ -1,4 +1,4 @@
- add // Import the necessary modules
+// Import the necessary modules
 require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -138,17 +138,39 @@ app.post("/poll", checkAuth, (req, res) => {
 
 app.post("/update-poll", checkAuth, (req, res) => {
   const updateBody = req.body;
-  console.log("ACCEPTED");
-  console.log(updateBody);
-  /*{
-    pollId: 12312313131,
-    option: 1
-  }*/
+  const pollID = updateBody.pollId;
+  const option = updateBody.option;
 
-  /*{
-    pollId: 12312313131,
-    option: 1
-  }*/
+  // Find the poll by its pollID
+  Poll.findOne({ pollID: pollID })
+    .then((poll) => {
+      if (!poll) {
+        // Poll not found
+        return res.status(404).send("Poll not found");
+      }
+
+      // Update the poll based on the chosen option
+      if (option === 0) {
+        // Increment approveCount
+        poll.approveCount++;
+      } else if (option === 1) {
+        // Increment disapproveCount
+        poll.disapproveCount++;
+      }
+
+      // Save the updated poll
+      poll
+        .save()
+        .then((updatedPoll) => {
+          res.status(200).send("Poll updated successfully");
+        })
+        .catch((error) => {
+          res.status(500).send("Internal Server Error");
+        });
+    })
+    .catch((error) => {
+      res.status(500).send("Internal Server Error");
+    });
 });
 
 // 404 for all other routes

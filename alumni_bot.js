@@ -163,7 +163,7 @@ alumni_bot.on("text", async (ctx) => {
 
           const requestOptions = {
             method: "POST",
-            uri: "http://localhost:3000/poll", // Update the URL to your server's endpoint
+            uri: "http://localhost:8080/poll", // Update the URL to your server's endpoint
             body: poll,
             json: true,
             headers: {
