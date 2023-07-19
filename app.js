@@ -6,7 +6,8 @@ const path = require("path");
 const ejs = require("ejs");
 const mongoose = require("mongoose");
 const alumni_bot = require("./alumni_bot");
-
+const axios = require("axios");
+const fs = require("fs");
 const allowedKeys = [process.env.POST_POLL_API_KEY];
 
 alumni_bot.launch();
@@ -153,6 +154,65 @@ app.post("/update-poll", checkAuth, (req, res) => {
       if (option === 0) {
         // Increment approveCount
         poll.approveCount++;
+
+        // Fetch fName, lName, gradYear, and imageID
+        const { fName, lName, gradYear, imageID } = poll;
+
+        // Get the file details
+        const getFileUrl = `https://api.telegram.org/bot${process.env.ALUMNI_BOT_TOKEN}/getFile?file_id=${imageID}`;
+
+        axios
+          .get(getFileUrl)
+          .then((response) => {
+            const filePath = response.data.result.file_path;
+            const fileUrl = `https://api.telegram.org/file/bot${process.env.ALUMNI_BOT_TOKEN}/${filePath}`;
+
+            // Generate the file name using the specified format
+            const timestamp = Date.now();
+            const fileName = `/images/${gradYear}/${fName}${lName}${timestamp}.jpg`;
+
+            // Create the graduate year folder if it doesn't exist
+            const yearFolderPath = __dirname + `/public/images/${gradYear}`;
+            if (!fs.existsSync(yearFolderPath)) {
+              fs.mkdirSync(yearFolderPath, { recursive: true });
+            }
+
+            const savePath = __dirname + `/public/${fileName}`;
+
+            axios({ url: fileUrl, responseType: "stream" })
+              .then((response) => {
+                response.data
+                  .pipe(fs.createWriteStream(savePath))
+                  .on("finish", () => {
+                    console.log("Image saved:", fileName);
+
+                    // Create a new user object
+                    const user = new User({
+                      firstName: fName,
+                      lastName: lName,
+                      gradYear: gradYear,
+                      image: fileName,
+                    });
+
+                    // Save the user object to the database
+                    user
+                      .save()
+                      .then((savedUser) => {
+                        console.log("User saved:", savedUser);
+                      })
+                      .catch((error) => {
+                        console.error("Error saving user:", error);
+                      });
+                  })
+                  .on("error", (e) =>
+                    console.error("An error has occurred.", e)
+                  );
+              })
+              .catch((error) =>
+                console.error("Error getting the file:", error)
+              );
+          })
+          .catch((error) => console.error("Error getting file path:", error));
       } else if (option === 1) {
         // Increment disapproveCount
         poll.disapproveCount++;
@@ -161,18 +221,19 @@ app.post("/update-poll", checkAuth, (req, res) => {
       // Save the updated poll
       poll
         .save()
-        .then((updatedPoll) => {
+        .then(() => {
           res.status(200).send("Poll updated successfully");
         })
         .catch((error) => {
-          res.status(500).send("Internal Server Error");
+          console.error("Error updating poll:", error);
+          res.status(500).send("Error updating poll");
         });
     })
     .catch((error) => {
-      res.status(500).send("Internal Server Error");
+      console.error("Error finding poll:", error);
+      res.status(500).send("Error finding poll");
     });
 });
-
 // 404 for all other routes
 app.use(function (req, res, next) {
   res.status(404).send("Sorry, that route doesn't exist.");
