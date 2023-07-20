@@ -133,65 +133,70 @@ alumni_bot.on("text", async (ctx) => {
           ctx.reply("Please enter a valid last name:");
         }
         break;
-      case "awaitingGraduateYear":
-        const graduateYear = parseInt(message);
-        if (isValidGraduateYear(graduateYear)) {
-          const userDetails = {
-            firstName: ctx.session.firstName,
-            lastName: ctx.session.lastName,
-            graduateYear: graduateYear,
-          };
-          const confirmationMessage = generateConfirmationMessage(userDetails);
-
-          await ctx.replyWithPhoto(ctx.session.imageFileId, {
-            caption: confirmationMessage,
-          });
-
-          let poll = new Poll({
-            fName: userDetails.firstName,
-            lName: userDetails.lastName,
-            gradYear: userDetails.graduateYear,
-            creatorID: ctx.from.id,
-            imageID: ctx.session.imageFileId,
-          });
-          const pollMessage = await ctx.replyWithPoll(
-            "Do you approve?",
-            ["Approve ✔", "Disapprove ❌"],
-            { is_anonymous: false, open_period: 300 }
-          );
-          poll.pollID = pollMessage.poll.id;
-
-          const requestOptions = {
-            method: "POST",
-            uri: "http://localhost:8080/poll", // Update the URL to your server's endpoint
-            body: poll,
-            json: true,
-            headers: {
-              Authorization: process.env.POST_POLL_API_KEY, // Replace with your API key
-            },
-          };
-
-          //Make request with poll body
-          try {
-            request(requestOptions, (error, response, body) => {
-              if (error) {
-                console.error("Error making the POST request:", error);
-              } else {
-                console.log(body); // Log the response body from your server
-              }
+        case "awaitingGraduateYear":
+          const graduateYear = parseInt(message);
+          if (isValidGraduateYear(graduateYear)) {
+            const userDetails = {
+              firstName: ctx.session.firstName,
+              lastName: ctx.session.lastName,
+              graduateYear: graduateYear,
+            };
+            const confirmationMessage = generateConfirmationMessage(userDetails);
+        
+            await ctx.replyWithPhoto(ctx.session.imageFileId, {
+              caption: confirmationMessage,
             });
-          } catch (error) {
-            console.error("Error making the POST request:", error);
+        
+            ctx.replyWithPoll(
+              "Do you approve?",
+              ["Approve ✔", "Disapprove ❌"],
+              { is_anonymous: false, open_period: 300 }
+            ).then(async (pollMessage) => {
+              const poll = new Poll({
+                fName: userDetails.firstName,
+                lName: userDetails.lastName,
+                gradYear: userDetails.graduateYear,
+                creatorID: ctx.from.id,
+                imageID: ctx.session.imageFileId,
+                pollID: pollMessage.poll.id
+              });
+        
+              const requestOptions = {
+                method: "POST",
+                uri: "http://localhost:3000/poll", // Update the URL to your server's endpoint
+                body: poll,
+                json: true,
+                headers: {
+                  Authorization: process.env.POST_POLL_API_KEY, // Replace with your API key
+                },
+              };
+        
+              //Make request with poll body
+              try {
+                await request(requestOptions, (error, response, body) => {
+                  if (error) {
+                    console.error("Error making the POST request:", error);
+                  } else {
+                    console.log(body); // Log the response body from your server
+                    ctx.session.state = "";
+                  }
+                });
+              } catch (error) {
+                console.error("Error making the POST request:", error);
+              }
+              // Clear the session state
+            }).catch(error => {
+              console.log(error);
+            });
+        
+          } else {
+            ctx.reply("Please enter a valid graduate year:");
           }
-
-          // Clear the session state
-          ctx.session.state = "";
-        } else {
-          ctx.reply("Please enter a valid graduate year:");
-        }
-        break;
+          break;
+        
     }
-  } else {
+  }
+   else {
     //ctx.reply("Unauthorized access.");
   }
 });
@@ -225,12 +230,13 @@ alumni_bot.on("photo", async (ctx) => {
 
 alumni_bot.on("poll_answer", async (ctx) => {
   const pollId = ctx.update.poll_answer.poll_id;
+  console.log(ctx.update);
   const user = ctx.update.poll_answer.user;
   const chosenOption = ctx.update.poll_answer.option_ids[0];
   if (isUserInGroup(user)) {
     const requestOptions = {
       method: "POST",
-      uri: "http://localhost:8080/update-poll", // Update the URL to your server's endpoint
+      uri: "http://localhost:3000/update-poll", // Update the URL to your server's endpoint
       body: { pollId: pollId, option: chosenOption },
       json: true,
       headers: {

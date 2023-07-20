@@ -101,6 +101,7 @@ const checkAuth = (req, res, next) => {
 app.post("/poll", checkAuth, (req, res) => {
   // Your code for handling the POST request
   const pollData = req.body;
+  console.log(pollData);
   Poll.findOne({ fName: pollData.fName, lName: pollData.lName })
     .then((existingPoll) => {
       if (existingPoll) {
@@ -140,6 +141,7 @@ app.post("/poll", checkAuth, (req, res) => {
 app.post("/update-poll", checkAuth, (req, res) => {
   const updateBody = req.body;
   const pollID = updateBody.pollId;
+  console.log(pollID);
   const option = updateBody.option;
 
   // Find the poll by its pollID
@@ -154,65 +156,67 @@ app.post("/update-poll", checkAuth, (req, res) => {
       if (option === 0) {
         // Increment approveCount
         poll.approveCount++;
-
-        // Fetch fName, lName, gradYear, and imageID
-        const { fName, lName, gradYear, imageID } = poll;
-
-        // Get the file details
-        const getFileUrl = `https://api.telegram.org/bot${process.env.ALUMNI_BOT_TOKEN}/getFile?file_id=${imageID}`;
+        console.log(poll.approveCount);
+        if(poll.approveCount === 1) {
+          const { fName, lName, gradYear, imageID } = poll;
+          const getFileUrl = `https://api.telegram.org/bot${process.env.ALUMNI_BOT_TOKEN}/getFile?file_id=${imageID}`;
 
         axios
-          .get(getFileUrl)
-          .then((response) => {
-            const filePath = response.data.result.file_path;
-            const fileUrl = `https://api.telegram.org/file/bot${process.env.ALUMNI_BOT_TOKEN}/${filePath}`;
+        .get(getFileUrl)
+        .then((response) => {
+          const filePath = response.data.result.file_path;
+          const fileUrl = `https://api.telegram.org/file/bot${process.env.ALUMNI_BOT_TOKEN}/${filePath}`;
 
-            // Generate the file name using the specified format
-            const timestamp = Date.now();
-            const fileName = `/images/${gradYear}/${fName}${lName}${timestamp}.jpg`;
+          // Generate the file name using the specified format
+          const timestamp = Date.now();
+          const fileName = `/images/${gradYear}/${fName}${lName}${timestamp}.jpg`;
 
-            // Create the graduate year folder if it doesn't exist
-            const yearFolderPath = __dirname + `/public/images/${gradYear}`;
-            if (!fs.existsSync(yearFolderPath)) {
-              fs.mkdirSync(yearFolderPath, { recursive: true });
-            }
+          // Create the graduate year folder if it doesn't exist
+          const yearFolderPath = __dirname + `/public/images/${gradYear}`;
+          if (!fs.existsSync(yearFolderPath)) {
+            fs.mkdirSync(yearFolderPath, { recursive: true });
+          }
 
-            const savePath = __dirname + `/public/${fileName}`;
+          const savePath = __dirname + `/public/${fileName}`;
 
-            axios({ url: fileUrl, responseType: "stream" })
-              .then((response) => {
-                response.data
-                  .pipe(fs.createWriteStream(savePath))
-                  .on("finish", () => {
-                    console.log("Image saved:", fileName);
+          axios({ url: fileUrl, responseType: "stream" })
+            .then((response) => {
+              response.data
+                .pipe(fs.createWriteStream(savePath))
+                .on("finish", () => {
+                  console.log("Image saved:", fileName);
 
-                    // Create a new user object
-                    const user = new User({
-                      firstName: fName,
-                      lastName: lName,
-                      gradYear: gradYear,
-                      image: fileName,
+                  // Create a new user object
+                  const user = new User({
+                    firstName: fName,
+                    lastName: lName,
+                    gradYear: gradYear,
+                    image: fileName,
+                  });
+
+                  // Save the user object to the database
+                  user
+                    .save()
+                    .then((savedUser) => {
+                      console.log("User saved:", savedUser);
+                    })
+                    .catch((error) => {
+                      console.error("Error saving user:", error);
                     });
+                })
+                .on("error", (e) =>
+                  console.error("An error has occurred.", e)
+                );
+            })
+            .catch((error) =>
+              console.error("Error getting the file:", error)
+            );
+        })
+        .catch((error) => console.error("Error getting file path:", error));
+        }
+        // Fetch fName, lName, gradYear, and imageID
+        // Get the file details
 
-                    // Save the user object to the database
-                    user
-                      .save()
-                      .then((savedUser) => {
-                        console.log("User saved:", savedUser);
-                      })
-                      .catch((error) => {
-                        console.error("Error saving user:", error);
-                      });
-                  })
-                  .on("error", (e) =>
-                    console.error("An error has occurred.", e)
-                  );
-              })
-              .catch((error) =>
-                console.error("Error getting the file:", error)
-              );
-          })
-          .catch((error) => console.error("Error getting file path:", error));
       } else if (option === 1) {
         // Increment disapproveCount
         poll.disapproveCount++;
@@ -240,6 +244,6 @@ app.use(function (req, res, next) {
 });
 
 // Start the server on port 3000
-app.listen(8080, () => {
+app.listen(3000, () => {
   console.log("Server is running on http://localhost:3000");
 });
