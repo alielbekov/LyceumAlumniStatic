@@ -91,7 +91,7 @@ alumni_bot.command("fact", (ctx) => {
     ctx.reply("Unauthorized access.");
   }
 });
-alumni_bot.command("addalumnus", (ctx) => {
+alumni_bot.command("add", (ctx) => {
   ctx.session = {};
   // Check if the chat ID is authorized
   if (isChatAuthorized(ctx.chat.id)) {
