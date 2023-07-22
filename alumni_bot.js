@@ -279,7 +279,7 @@ function isValidLastName(lastName) {
 }
 
 function isValidGraduateYear(gradYear) {
-  const regex = /^(201[7-9]|202[0-1])$/;
+  const regex = /^(201[7-9]|202[0-3])$/;
   return regex.test(gradYear);
 }
 
