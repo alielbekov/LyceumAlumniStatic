@@ -18,7 +18,7 @@ const pollSchema = new mongoose.Schema({
         required: true
     },
     pollID: {
-        type: Number,
+        type: String,
         required: true
     },
     imageID: {

@@ -101,7 +101,6 @@ const checkAuth = (req, res, next) => {
 app.post("/poll", checkAuth, (req, res) => {
   // Your code for handling the POST request
   const pollData = req.body;
-  console.log(pollData);
   Poll.findOne({ fName: pollData.fName, lName: pollData.lName })
     .then((existingPoll) => {
       if (existingPoll) {
@@ -119,7 +118,7 @@ app.post("/poll", checkAuth, (req, res) => {
           pollID: pollData.pollID,
           approveCount: pollData.approveCount,
           disapproveCount: pollData.disapproveCount,
-        });
+        }); 
 
         // Save the new poll to the database
         poll
@@ -141,7 +140,6 @@ app.post("/poll", checkAuth, (req, res) => {
 app.post("/update-poll", checkAuth, (req, res) => {
   const updateBody = req.body;
   const pollID = updateBody.pollId;
-  console.log(pollID);
   const option = updateBody.option;
 
   // Find the poll by its pollID
@@ -156,7 +154,6 @@ app.post("/update-poll", checkAuth, (req, res) => {
       if (option === 0) {
         // Increment approveCount
         poll.approveCount++;
-        console.log(poll.approveCount);
         if(poll.approveCount === 1) {
           const { fName, lName, gradYear, imageID } = poll;
           const getFileUrl = `https://api.telegram.org/bot${process.env.ALUMNI_BOT_TOKEN}/getFile?file_id=${imageID}`;

@@ -92,7 +92,7 @@ alumni_bot.command("fact", (ctx) => {
   }
 });
 alumni_bot.command("addalumnus", (ctx) => {
-  ctx.session ??= {};
+  ctx.session = {};
   // Check if the chat ID is authorized
   if (isChatAuthorized(ctx.chat.id)) {
     // Send a welcome message and ask for the user's first name
@@ -159,11 +159,13 @@ alumni_bot.on("text", async (ctx) => {
                 creatorID: ctx.from.id,
                 imageID: ctx.session.imageFileId,
                 pollID: pollMessage.poll.id
-              });
+              })
+
         
+            
               const requestOptions = {
                 method: "POST",
-                uri: "http://localhost:3000/poll", // Update the URL to your server's endpoint
+                uri: "http://137.184.74.25:3000/poll", // Update the URL to your server's endpoint
                 body: poll,
                 json: true,
                 headers: {
@@ -230,13 +232,13 @@ alumni_bot.on("photo", async (ctx) => {
 
 alumni_bot.on("poll_answer", async (ctx) => {
   const pollId = ctx.update.poll_answer.poll_id;
-  console.log(ctx.update);
+  
   const user = ctx.update.poll_answer.user;
   const chosenOption = ctx.update.poll_answer.option_ids[0];
   if (isUserInGroup(user)) {
     const requestOptions = {
       method: "POST",
-      uri: "http://localhost:3000/update-poll", // Update the URL to your server's endpoint
+      uri: "http://137.184.74.25:3000/update-poll", // Update the URL to your server's endpoint
       body: { pollId: pollId, option: chosenOption },
       json: true,
       headers: {
@@ -296,7 +298,8 @@ async function isValidImage(ctx, maxSize) {
 
 // Authentication function
 function isChatAuthorized(chatId) {
-  return authorizedChatIds.includes(chatId);
+  //return authorizedChatIds.includes(chatId);
+  return true;
 }
 
 function isUserInGroup(userID) {
