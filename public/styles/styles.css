@@ -1,99 +1,109 @@
 /* Reset default browser styles */
-body, h1, h2, h3, p, ul, li {
-    margin: 0;
-    padding: 0;
-    
+body,
+h1,
+h2,
+h3,
+p,
+ul,
+li {
+  margin: 0;
+  padding: 0;
 }
 body {
-    background-image: url('../images/background-image.jpg');
-    background-size: cover; /* this will ensure the image covers the entire element */
-    background-repeat: no-repeat; /* this will prevent the image from repeating */
-    background-position: center; /* this will center the image */
+  background-image: url("../images/background-image.jpg");
+  background-size: cover; /* this will ensure the image covers the entire element */
+  background-repeat: no-repeat; /* this will prevent the image from repeating */
+  background-position: center; /* this will center the image */
 }
 
 .header {
-    text-align: center;
+  text-align: center;
 }
 .navbar {
-    background-color: rgba(64,64,64, 0.712); /* Golden color with opacity */
-    backdrop-filter: blur(10px); /* Apply blur */
-    -webkit-backdrop-filter: blur(10px); /* For Safari */
-    border-bottom: 1px solid rgba(221, 201, 66, 0.3); /* Optional: adds a subtle border */
-  }
-.navbar-brand{
-    color: white;
-}  
+  background-color: rgba(64, 64, 64, 0.712); /* Golden color with opacity */
+  backdrop-filter: blur(10px); /* Apply blur */
+  -webkit-backdrop-filter: blur(10px); /* For Safari */
+  border-bottom: 1px solid rgba(221, 201, 66, 0.3); /* Optional: adds a subtle border */
+}
+.navbar-brand {
+  color: white;
+}
 
-.year{
-    
-    margin: 10px;
-    margin-bottom: 2px;
+.year {
+  margin: 10px;
+  margin-bottom: 2px;
 }
 
 .disabled-link {
-    cursor: not-allowed;
-    opacity: 0.6;
-    text-decoration: none;
-    pointer-events: none;
+  cursor: not-allowed;
+  opacity: 0.6;
+  text-decoration: none;
+  pointer-events: none;
 }
 
 .footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background-color: rgba(64,64,64, 0.712) !important; /* Golden color with opacity */
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: rgba(
+    64,
+    64,
+    64,
+    0.712
+  ) !important; /* Golden color with opacity */
+}
 
-  }
+.gallery {
+  margin: auto 10px;
+}
+.card {
+  margin: auto;
+  margin-top: 4px;
+  width: 200px;
+  display: inline-block;
+}
+.card-body {
+  padding: 8px;
+  background-color: #000000;
+}
+.user-images {
+  /* background-color: red; */
+  margin: auto;
+  margin-top: 20px;
+  width: 90%;
+  margin-bottom: 30px;
 
-.gallery{
-    margin: auto 10px;
+  padding: 4px;
+  background-color: rgba(64, 64, 64, 0.712); /* Golden color with opacity */
 }
-.card{
-    margin: auto;
-    margin-top: 4px;
-    width: 200px;
-    display: inline-block;
-}
-.card-body{
-    padding: 8px;
-    background-color: #000000;
-}
-.user-images{
-    /* background-color: red; */
-    margin: auto;
-    margin-top: 20px;
-    width: 90%;
-    margin-bottom: 30px;
-    
-    
-    padding: 4px;
-    background-color: rgba(64,64,64, 0.712); /* Golden color with opacity */
-
-}
-.content{
-   /* background-color: blue; */
-   padding: 10px 0 30px 0;
+.content {
+  /* background-color: blue; */
+  padding: 10px 0 30px 0;
 }
 
 .flex-wrap {
-    flex-wrap: wrap;
-  }
-  
-  .classof {
-    margin: auto;
-    font-size: 50px; /* increased font size for emphasis */
-    font-weight: bold; /* make text bold */
-    color: #fcca26; /* gold color text */
-    font-family: 'Bonheur Royale', cursive;
-    text-align: center; /* center alignment */
-    text-shadow: 0 0 10px #fcca26, 0 0 20px #fcca26, 0 0 30px #fcca26, 0 0 40px #fcca26;
-  }
-  
-  main{ 
-    min-height: calc(100vh - 56px);
-    display: flex;
-    flex-direction: column;
-  }
-  .footer-copy{
-    text-align: center;
-  }
+  flex-wrap: wrap;
+}
+
+.classof {
+  margin: auto;
+  font-size: 50px; /* increased font size for emphasis */
+  font-weight: bold; /* make text bold */
+  color: #fcca26; /* gold color text */
+  font-family: "Bonheur Royale", cursive;
+  text-align: center; /* center alignment */
+  text-shadow: 0 0 10px #fcca26, 0 0 20px #fcca26, 0 0 30px #fcca26,
+    0 0 40px #fcca26;
+}
+
+main {
+  min-height: calc(100vh - 56px);
+  display: flex;
+  flex-direction: column;
+}
+.footer-copy {
+  text-align: center;
+}
+.add-member-button {
+  text-align: right;
+}
