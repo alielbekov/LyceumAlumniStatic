@@ -1,17 +1,6 @@
 <main class="content">
     <div class="user-images row">
-        <form class="text-white col-6">
-            <div class="mb-3">   
-                <label for="exampleInputEmail1" class="form-label">First name</label>
-                <input type="email" class="form-control bg-dark text-white" id="exampleInputEmail1" aria-describedby="emailHelp">
-            </div>
-            <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Last name</label>
-                <input type="text" class="form-control bg-dark text-white" id="exampleInputPassword1">
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-       </form>
-        <div class="col-6">
+        <div class="col-md-6 col-12 add-member">
             <div class="card d-flex align-items-stretch">
                 <img src="" class="card-img-top" alt="" onerror="this.onerror=null; this.src='/images/rules.png';"
                 id="" onclick="openModal('')">
@@ -20,12 +9,28 @@
                         First name
                         <br>
                         Last name
-                        </p>
+                    </p>
                     <p class="card-text"></p>
                 </div>
             </div>
         </div>
+        <form class="text-white col-md-6  col-12 add-member">
+            <div class="cropper cropper-container">
+                <img id="member-image"class="cropper-image"src="/images/rules.png" alt="hello world">                
+            </div>
+
+            <div class="mb-3">   
+                <label for="exampleInputEmail1" class="form-label">First name</label>
+                <input type="text" class="form-control bg-dark text-white" id="exampleInputEmail1" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Last name</label>
+                <input type="text" class="form-control bg-dark text-white" id="exampleInputPassword1">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+       </form>
+
      <div>
+        <script src="scripts/cropper-instance.js"></script>
 </main>
 
-<script src="./node_modules/cropperjs/dist/cropper.min.js"></script>

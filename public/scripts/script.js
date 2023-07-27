@@ -1,12 +1,7 @@
-var cropper;
-var $image = $("#image-preview");
 
 function openModal(imageSrc) {
   const modalImage = document.getElementById("modalImage");
   modalImage.src = imageSrc;
-
-  // Initialize cropper
-  cropper = new Cropper(modalImage);
 
   $(".bd-example-modal-lg").modal("show"); // Show the modal using Bootstrap jQuery
 
@@ -30,20 +25,3 @@ $(".bd-example-modal-lg").on("hidden.bs.modal", function () {
   history.back(); // Go back to the previous URL
 });
 
-$("#upload-photo").change(function (e) {
-  var files = e.target.files;
-
-  var done = function (url) {
-    $image.attr("src", url);
-    $image.show();
-    openModal(url);
-  };
-
-  if (files && files.length > 0) {
-    reader = new FileReader();
-    reader.onload = function (e) {
-      done(reader.result);
-    };
-    reader.readAsDataURL(files[0]);
-  }
-});
