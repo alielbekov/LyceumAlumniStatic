@@ -1,4 +1,5 @@
 /* Reset default browser styles */
+<<<<<<< HEAD
 body,
 h1,
 h2,
@@ -8,7 +9,14 @@ ul,
 li {
   margin: 0;
   padding: 0;
+=======
+body, h1, h2, h3, p, ul, li {
+    margin: 0;
+    padding: 0;
+>>>>>>> 6d35e4e (mac local changes)
 }
+
+
 body {
   background-image: url("../images/background-image.jpg");
   background-size: cover; /* this will ensure the image covers the entire element */
@@ -19,7 +27,9 @@ body {
 .header {
   text-align: center;
 }
+
 .navbar {
+<<<<<<< HEAD
   background-color: rgba(64, 64, 64, 0.712); /* Golden color with opacity */
   backdrop-filter: blur(10px); /* Apply blur */
   -webkit-backdrop-filter: blur(10px); /* For Safari */
@@ -28,6 +38,18 @@ body {
 .navbar-brand {
   color: white;
 }
+=======
+    background-color: rgba(64,64,64, 0.712); /* Golden color with opacity */
+    backdrop-filter: blur(10px); /* Apply blur */
+    -webkit-backdrop-filter: blur(10px); /* For Safari */
+    border-bottom: 1px solid rgba(221, 201, 66, 0.3); /* Optional: adds a subtle border */
+}
+
+
+.navbar-brand{
+    color: white;
+}  
+>>>>>>> 6d35e4e (mac local changes)
 
 .year {
   margin: 10px;
@@ -82,6 +104,7 @@ body {
 }
 
 .flex-wrap {
+<<<<<<< HEAD
   flex-wrap: wrap;
 }
 
@@ -107,3 +130,36 @@ main {
 .add-member-button {
   text-align: right;
 }
+=======
+    flex-wrap: wrap;
+  }
+  
+  .classof {
+    margin: auto;
+    font-size: 50px; /* increased font size for emphasis */
+    font-weight: bold; /* make text bold */
+    color: #fcca26; /* gold color text */
+    font-family: 'Bonheur Royale', cursive;
+    text-align: center; /* center alignment */
+    text-shadow: 0 0 10px #fcca26, 0 0 20px #fcca26, 0 0 30px #fcca26, 0 0 40px #fcca26;
+  }
+  
+  main{ 
+    min-height: calc(100vh - 56px);
+    display: flex;
+    flex-direction: column;
+  }
+  .footer-copy{
+    text-align: center;
+  }
+  .carousel{
+    margin: auto;
+  }
+  .carousel-item .d-block{
+    width:400px;
+  }
+  .brand{
+    width: 150px;
+  }
+  
+>>>>>>> 6d35e4e (mac local changes)

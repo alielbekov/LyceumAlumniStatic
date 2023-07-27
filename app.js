@@ -31,6 +31,7 @@ mongoose
 const User = require("./models/user");
 const CommunityGallery = require("./models/community-gallery");
 const Poll = require("./models/poll");
+const Event = require("./models/landing-event");
 
 // Create an instance of express
 const app = express();
@@ -51,6 +52,8 @@ const years = ["2017", "2018", "2019", "2020", "2021", "2022", "2023"]; // Array
 
 // Define a route handler for GET requests made to the root path
 app.get("/", (req, res) => {
+    //make a get request to get ladning events
+
   res.render("index", { years: years, page: "landing", year: null });
 });
 
