@@ -1,24 +1,9 @@
 /* Reset default browser styles */
-<<<<<<< HEAD
-body,
-h1,
-h2,
-h3,
-p,
-ul,
-li {
-  margin: 0;
-  padding: 0;
-=======
+
 body, h1, h2, h3, p, ul, li {
     margin: 0;
     padding: 0;
-<<<<<<< HEAD
->>>>>>> 6d35e4e (mac local changes)
-=======
->>>>>>> 6d35e4e (mac local changes)
 }
-
 
 body {
   background-image: url("../images/background-image.jpg");
@@ -32,7 +17,6 @@ body {
 }
 
 .navbar {
-<<<<<<< HEAD
   background-color: rgba(64, 64, 64, 0.712); /* Golden color with opacity */
   backdrop-filter: blur(10px); /* Apply blur */
   -webkit-backdrop-filter: blur(10px); /* For Safari */
@@ -41,18 +25,6 @@ body {
 .navbar-brand {
   color: white;
 }
-=======
-    background-color: rgba(64,64,64, 0.712); /* Golden color with opacity */
-    backdrop-filter: blur(10px); /* Apply blur */
-    -webkit-backdrop-filter: blur(10px); /* For Safari */
-    border-bottom: 1px solid rgba(221, 201, 66, 0.3); /* Optional: adds a subtle border */
-}
-
-
-.navbar-brand{
-    color: white;
-}  
->>>>>>> 6d35e4e (mac local changes)
 
 .year {
   margin: 10px;

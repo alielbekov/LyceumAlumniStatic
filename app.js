@@ -42,6 +42,8 @@ app.set("view engine", "ejs");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
+app.use('/favicon.ico', (req, res) => res.status(204));
+
 
 // Optionally, set the views directory if it isn't named "views"
 app.set("views", path.join(__dirname, "/views"));
@@ -57,7 +59,7 @@ app.get("/", (req, res) => {
   res.render("index", { years: years, page: "landing", year: null });
 });
 
-app.get("/add-user", (req, res) => {
+app.get("/add-member", (req, res) => {
   res.render("index", { years: years, page: "member", year: null });
 });
 

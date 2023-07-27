@@ -1,25 +1,29 @@
 <main class="content">
-    Resources: here
-    <div class="user-images">
-        <form>
-            <div class="mb-3">
-                <label for="upload-photo" class="form-label">Upload Photo</label>
-                <input type="file" class="form-control" id="upload-photo" accept="image/*">
-                <img id="image-preview" src="#" alt="your image" style="display: none; width: 300px; height: 300px;"/>
-            </div>
+    <div class="user-images row">
+        <form class="text-white col-6">
             <div class="mb-3">   
-                <label for="exampleInputEmail1" class="form-label">Email address</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                <label for="exampleInputEmail1" class="form-label">First name</label>
+                <input type="email" class="form-control bg-dark text-white" id="exampleInputEmail1" aria-describedby="emailHelp">
             </div>
             <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Password</label>
-                <input type="password" class="form-control" id="exampleInputPassword1">
+                <label for="exampleInputPassword1" class="form-label">Last name</label>
+                <input type="text" class="form-control bg-dark text-white" id="exampleInputPassword1">
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
-     </form>
-        <div>
-            
+       </form>
+        <div class="col-6">
+            <div class="card d-flex align-items-stretch">
+                <img src="" class="card-img-top" alt="" onerror="this.onerror=null; this.src='/images/rules.png';"
+                id="" onclick="openModal('')">
+                <div class="card-body">
+                    <p class="card-title text-white">
+                        First name
+                        <br>
+                        Last name
+                        </p>
+                    <p class="card-text"></p>
+                </div>
+            </div>
         </div>
      <div>
 </main>
