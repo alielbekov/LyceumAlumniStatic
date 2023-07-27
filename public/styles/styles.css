@@ -13,6 +13,9 @@ li {
 body, h1, h2, h3, p, ul, li {
     margin: 0;
     padding: 0;
+<<<<<<< HEAD
+>>>>>>> 6d35e4e (mac local changes)
+=======
 >>>>>>> 6d35e4e (mac local changes)
 }
 
@@ -104,62 +107,34 @@ body {
 }
 
 .flex-wrap {
-<<<<<<< HEAD
   flex-wrap: wrap;
 }
 
+
 .classof {
-  margin: auto;
-  font-size: 50px; /* increased font size for emphasis */
-  font-weight: bold; /* make text bold */
-  color: #fcca26; /* gold color text */
-  font-family: "Bonheur Royale", cursive;
-  text-align: center; /* center alignment */
-  text-shadow: 0 0 10px #fcca26, 0 0 20px #fcca26, 0 0 30px #fcca26,
-    0 0 40px #fcca26;
+margin: auto;
+font-size: 50px; /* increased font size for emphasis */
+font-weight: bold; /* make text bold */
+color: #fcca26; /* gold color text */
+font-family: 'Bonheur Royale', cursive;
+text-align: center; /* center alignment */
+text-shadow: 0 0 10px #fcca26, 0 0 20px #fcca26, 0 0 30px #fcca26, 0 0 40px #fcca26;
 }
 
-main {
-  min-height: calc(100vh - 56px);
-  display: flex;
-  flex-direction: column;
+main{ 
+min-height: calc(100vh - 56px);
+display: flex;
+flex-direction: column;
 }
-.footer-copy {
-  text-align: center;
+.footer-copy{
+text-align: center;
 }
-.add-member-button {
-  text-align: right;
+.carousel{
+margin: auto;
 }
-=======
-    flex-wrap: wrap;
-  }
-  
-  .classof {
-    margin: auto;
-    font-size: 50px; /* increased font size for emphasis */
-    font-weight: bold; /* make text bold */
-    color: #fcca26; /* gold color text */
-    font-family: 'Bonheur Royale', cursive;
-    text-align: center; /* center alignment */
-    text-shadow: 0 0 10px #fcca26, 0 0 20px #fcca26, 0 0 30px #fcca26, 0 0 40px #fcca26;
-  }
-  
-  main{ 
-    min-height: calc(100vh - 56px);
-    display: flex;
-    flex-direction: column;
-  }
-  .footer-copy{
-    text-align: center;
-  }
-  .carousel{
-    margin: auto;
-  }
-  .carousel-item .d-block{
-    width:400px;
-  }
-  .brand{
-    width: 150px;
-  }
-  
->>>>>>> 6d35e4e (mac local changes)
+.carousel-item .d-block{
+width:400px;
+}
+.brand{
+width: 150px;
+}
