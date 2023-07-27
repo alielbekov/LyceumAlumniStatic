@@ -11,8 +11,10 @@
     <div class="card-grid d-flex justify-content-evenly flex-wrap">
       <% cards.forEach((card, index) => { %>
         <div class="card d-flex align-items-stretch">
-            <img src="<%= card.image %>" class="card-img-top" alt="<%= card.firstName %> <%= card.lastName %>" onerror="this.onerror=null; this.src='/images/rules.png';"
-            id="image<%= index %>" onclick="openModal('<%= card.image %>')">
+          <img src="<%= card.image %>" class="card-img-top" alt="<%= card.firstName %> <%= card.lastName %>" 
+          onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=<%= card.firstName.charAt(0) %><%= card.lastName.charAt(0) %>&background=0C234B&color=fff';" 
+          id="image<%= index %>" onclick="openModal('<%= card.image %>')">
+          
             <div class="card-body">
                 <p class="card-title text-white"><%= card.firstName %> <br> <%= card.lastName %></p>
                 <p class="card-text"><%= card.text %></p>
