@@ -1,29 +1,32 @@
 <main class="content">
     <div class="user-images row  align-items-center">
         <form class="text-white col-md-6  col-12 add-member">
+            
+            <label for="imageFile">Select an image file:</label>
+            <input type="file" id="imageFile" name="imageFile" accept="image/*">
             <div class="cropper cropper-container">
-                <img id="member-image"class="cropper-image"src="/images/rules.png" alt="hello world">                
+                <img id="member-image" class="cropper-image" src="images/flag.png" alt="hello world">                
             </div>
+            
 
             <div class="mb-3">   
-                <label for="exampleInputEmail1" class="form-label">First name</label>
-                <input type="text" class="form-control bg-dark text-white" id="firstNameInput" aria-describedby="emailHelp" oninput="updateFirstName()">
+                <label for="fname" class="form-label">First name</label>
+                <input name="fname" type="text" class="form-control bg-dark text-white" id="firstNameInput" pattern="^[A-Za-z]{2,20}$" oninput="updateFirstName()" required>
             </div>
             <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Last name</label>
-                <input type="text" class="form-control bg-dark text-white" id="lastNameInput" oninput="updateLastName()">
+                <label for="lname" class="form-label">Last name</label>
+                <input name="lname" type="text" class="form-control bg-dark text-white" id="lastNameInput" pattern="^[A-Za-z]{2,20}$" oninput="updateLastName()" required>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
        </form>
 
         <div class="col-md-6 col-12 add-member py-4">
             <div class="card d-flex align-items-stretch ">
-                <img src="" class="card-img-top" alt="" onerror="this.onerror=null; this.src='/images/rules.png';"
-                id="" onclick="openModal('')">
+                <img id="output-image" src="" class="card-img-top" alt="output.jpg">
                 <div class="card-body">
                     <p class="card-title text-white">
                         <p class="text-white" id="firstNameOutput">First name</p>                        
-                        <p class="text-white" id="lastNameOutput">Last name</p>                        
+                        <p class="text-white" id="lastNameOutput" required>Last name</p>                        
                     </p>
                     <p class="card-text"></p>
                 </div>
@@ -32,5 +35,7 @@
 
 
       <script src="scripts/cropper-instance.js"></script>
+      <script src="scripts/compressor-instance.js"></script>
+
 </main>
 
