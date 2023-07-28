@@ -10,8 +10,7 @@ var observer = new MutationObserver(function (mutations) {
     console.log("style changed!");
   });
 });
-const cropperCropBox = document.getElementsByClassName("cropper-crop-box")[0];
-observer.observe(image, { attributes: true, attributeFilter: ["style"] });
+const cropperCropBox = document.getElementsByClassName("cropper-crop-box");
 
 function updateLastName() {
   let lName = document.getElementById("lastNameInput").value;
@@ -22,3 +21,11 @@ function updateFirstName() {
   let fName = document.getElementById("firstNameInput").value;
   document.getElementById("firstNameOutput").innerHTML = fName;
 }
+
+function updateImage() {
+  let croppedImage = cropper.getCroppedCanvas();
+  // .toDataURL("image/jpg");
+
+  alert(typeof croppedImage);
+}
+updateImage();

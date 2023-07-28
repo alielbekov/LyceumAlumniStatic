@@ -42,9 +42,8 @@ app.set("view engine", "ejs");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
-app.use('/cropper', express.static('node_modules/cropperjs/dist/'));
-app.use('/favicon.ico', (req, res) => res.status(204));
-
+app.use("/cropper", express.static("node_modules/cropperjs/dist/"));
+app.use("/favicon.ico", (req, res) => res.status(204));
 
 // Optionally, set the views directory if it isn't named "views"
 app.set("views", path.join(__dirname, "/views"));
@@ -55,12 +54,13 @@ const years = ["2017", "2018", "2019", "2020", "2021", "2022", "2023"]; // Array
 
 // Define a route handler for GET requests made to the root path
 app.get("/", (req, res) => {
-    //make a get request to get ladning events
+  //make a get request to get ladning events
 
   res.render("index", { years: years, page: "landing", year: null });
 });
 
 app.get("/add-member", (req, res) => {
+  console.log(req);
   res.render("index", { years: years, page: "member", year: null });
 });
 
