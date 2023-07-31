@@ -1,13 +1,9 @@
+// cropper.js
 const image = document.getElementById("member-image");
 const outputImage = document.getElementById("output-image"); // Replace 'yourOutputImageId' with the actual id of the output image
-const cropper = new Cropper(image, {
-  aspectRatio: 1,
-  viewMode: 3,
-  crop() {
-    const canvas = this.cropper.getCroppedCanvas();
-    outputImage.src = canvas.toDataURL("image/png"); // Converts the canvas to an image and put it in the output image
-  },
-});
+let cropper = null; // Define the cropper variable outside the event listener
+
+
 function updateLastName() {
   let lName = document.getElementById("lastNameInput").value;
   document.getElementById("lastNameOutput").innerHTML = lName;
@@ -18,10 +14,72 @@ function updateFirstName() {
   document.getElementById("firstNameOutput").innerHTML = fName;
 }
 
-function updateImage() {
-  let croppedImage = cropper.getCroppedCanvas();
-  // .toDataURL("image/jpg");
+function initializeCropper() {
+  cropper = new Cropper(image, {
+    aspectRatio: 1,
+    viewMode: 3,
+  });
 
-  alert(typeof croppedImage);
+  crop();
+
 }
-updateImage();
+
+
+
+
+document.getElementById("imageFile").addEventListener("change", async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+  
+    // Destroy the existing cropper if it exists
+    if (cropper) {
+      cropper.destroy();
+    }
+  
+    try {
+      const compressedResult = await compressImage(file); // Wait for the compression to finish
+      const compressedBlob = new Blob([compressedResult], { type: 'image/jpeg' }); // Assuming the compressed result is in JPEG format
+      const compressedFile = new File([compressedBlob], 'compressed-image.jpg', { type: 'image/jpeg' }); // Creating a new File object with the compressed data
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        // Create a new image element with the compressed image file
+        const newImage = new Image();
+        newImage.src = event.target.result;
+  
+        newImage.onload = () => {
+          // Replace the old image element with the new one
+          image.src = newImage.src;
+  
+          // Initialize the Cropper with the updated image
+          initializeCropper();
+        };
+      };
+  
+      reader.readAsDataURL(compressedFile); // Read the compressed image as Data URL
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
+function compressImage(file) {
+return new Promise((resolve, reject) => {
+    const compressor = new Compressor(file, {
+    quality: 1,
+    success(result) {
+        resolve(result);
+    },
+    error(err) {
+        reject(err);
+    },
+    });
+});
+}
+
+function crop(){
+    const canvas = cropper.getCroppedCanvas();
+    outputImage.src = canvas.toDataURL("image/png"); // Converts the canvas to an image and put it in the output image
+}
+
+
+// Initialize Cropper when the page loads
+initializeCropper();

@@ -7,6 +7,7 @@
             <div class="cropper cropper-container">
                 <img id="member-image" class="cropper-image" src="images/flag.png" alt="hello world">                
             </div>
+            <button onclick="crop()">Crop</button>
             <div class="mb-3">   
                 <label for="fname" class="form-label">First name</label>
                 <input name="fname" type="text" class="form-control bg-dark text-white" id="firstNameInput" pattern="^[A-Za-z]{2,20}$" oninput="updateFirstName()" required>
@@ -33,7 +34,7 @@
 
 
       <script src="scripts/cropper-instance.js"></script>
-      <script src="scripts/compressor-instance.js"></script>
+      <script src="scripts/compressor-instance.js" type="module"></script>
 
 
 </main>
