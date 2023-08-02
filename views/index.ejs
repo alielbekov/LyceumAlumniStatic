@@ -33,14 +33,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
   <body>
-    <%- include('./Header.ejs', { years: years, yaer:year }) %>
+    <%- include('./Header.ejs', { years: years, year:year }) %>
 
     <% if(page === 'main') { %>
       <%- include('./Main.ejs', { year: year, cards: cards }) %>
     <% } else if(page === 'resources') { %>
       <%- include('./Resources.ejs') %>
     <% }else if(page === 'member') { %>
-      <%- include('./Member.ejs') %>
+      <%- include('./Member.ejs', { year: year }) %>
     <% } else { %>
       <%- include('./Landing.ejs') %>
     <% } %>

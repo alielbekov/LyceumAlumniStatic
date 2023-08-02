@@ -43,12 +43,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use('/cropper', express.static('node_modules/cropperjs/dist/'));
-app.use('/compressor', express.static('node_modules/compressorjs/dist/'));
+app.use("/cropper", express.static("node_modules/cropperjs/dist/"));
+app.use("/compressor", express.static("node_modules/compressorjs/dist/"));
 
-app.use('/favicon.ico', (req, res) => res.status(204));
-
-
+app.use("/favicon.ico", (req, res) => res.status(204));
 
 // Optionally, set the views directory if it isn't named "views"
 app.set("views", path.join(__dirname, "/views"));
@@ -65,8 +63,12 @@ app.get("/", (req, res) => {
 });
 
 app.get("/add-member", (req, res) => {
-  console.log(req);
-  res.render("index", { years: years, page: "member", year: null });
+  var year = req.query.year;
+  if (year && years.includes(year)) {
+    res.render("index", { page: "member", year: year, years: years });
+  } else {
+    res.status(400).send("Invalid year");
+  }
 });
 
 app.get("/resources", (req, res) => {
