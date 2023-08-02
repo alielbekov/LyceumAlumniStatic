@@ -111,7 +111,12 @@ width:400px;
 width: 150px;
 }
 .cropper {
-    text-align: center; 
+    margin:auto;
+}
+
+.cropper-container{
+    width:250px;
+
 }
 
 .cropper-image {
@@ -122,5 +127,11 @@ width: 150px;
 }
 
 .add-member{
+
     display: inline-block;
+}
+
+.wrapper{
+    text-align: center;
+
 }
