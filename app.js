@@ -102,9 +102,22 @@ app.get("/:year", (req, res) => {
 
 app.get("/:year/community", (req, res) => {
   const year = req.params.year;
+  CommunityGallery.find({ year: year })
+    .then((images) => {
+      res.render("index", {
+        year: year,
+        years: years,
+        page: "community",
+        images: images,
+      });
+    })
+    .catch((error) => {
+      console.error("Error fetching images:", error);
+      res.status(500).send("Internal Server Error");
+    });
   // validate year
   // if valid, render 'community' view, e.g.,:
-  res.render("community", { year: year });
+  //res.render("index", { year: year, years: years, page: "community" });
 });
 
 const checkAuth = (req, res, next) => {

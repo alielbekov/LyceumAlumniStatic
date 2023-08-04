@@ -18,7 +18,7 @@
   
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="/cropper/cropper.min.css">
-  <link rel="stylesheet" href="styles/styles.css">
+  <link rel="stylesheet" href="/styles/styles.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Bonheur Royale">
 
   <link rel="icon" type="image/x-icon" href="/images/rules.png">
@@ -28,6 +28,8 @@
   <script src="scripts/script.js"></script>
   <script src="/cropper/cropper.min.js"></script>
   <script src="/compressor/compressor.min.js"></script>
+  <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+
 
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -41,7 +43,9 @@
       <%- include('./Resources.ejs') %>
     <% }else if(page === 'member') { %>
       <%- include('./Member.ejs', { year: year }) %>
-    <% } else { %>
+    <% } else if(page === 'community') { %>
+      <%- include('./Community.ejs', { year: year, images:images}) %>
+    <% }else { %>
       <%- include('./Landing.ejs') %>
     <% } %>
    
