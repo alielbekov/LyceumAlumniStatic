@@ -53,6 +53,10 @@ body {
 .gallery {
   margin: auto 10px;
 }
+.gallery-image {
+    height: 200px;
+    border: solid 1px white !important;
+}
 .card {
   margin: auto;
   margin-top: 4px;

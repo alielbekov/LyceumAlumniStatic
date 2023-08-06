@@ -1,17 +1,12 @@
 <main class="content">
-    <style>
-
-        .gallery-image{
-            width:300px;
-        }
-        
-
-    </style>
     <div class="d-flex justify-content-center align-items-center">
-        <button class="btn btn-secondary gallery">Main Gallery</button>
-        <button class="btn btn-secondary gallery">Community Gallery</button>
+        <a href="../<%= year %>">
+            <button class="btn btn-secondary gallery" onclick="window.history.back()">Main Gallery</button>
+        </a>
+            <button class="btn btn-secondary gallery">Community Gallery</button>
     </div>
-    <div class="user-images images-wrapper d-flex flex-wrap justify-content-around">
+
+    <div class="user-images  d-flex flex-wrap justify-content-around">
         <% images.forEach(function(image) { %>
             <% image.imagesLinks.forEach(function(link) { %>
                 <div class="p-1">
@@ -20,6 +15,6 @@
             <% }); %>
         <% }); %>
     </div>
-  
 
 </main>
+
