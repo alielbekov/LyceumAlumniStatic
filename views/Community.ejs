@@ -11,7 +11,7 @@
         <% images.forEach(function(image) { %>
             <% image.imagesLinks.forEach(function(link) { %>
                 <div class="p-1">
-                    <img class="gallery-image" src="<%= link %>" alt="communityImage.jpg">
+                    <img class="gallery-image" src="<%= link %>" onclick="openModal('<%= link %>')"alt="communityImage.jpg">
                 </div>
             <% }); %>
         <% }); %>
@@ -21,6 +21,14 @@
         </div>
     </div>
 
+
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <img id="modalImage" class="modal-img-top" alt="Modal Image">
+          </div>
+        </div>
+    </div>
 
 </main>
 
