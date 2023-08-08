@@ -71,6 +71,15 @@ app.get("/add-member", (req, res) => {
   }
 });
 
+app.get("/add-community-photo", (req, res) => {
+  var year = req.query.year;
+  if (year && years.includes(year)) {
+    res.render("index", { page: "community-photo", year: year, years: years });
+  } else {
+    res.status(400).send("Invalid year");
+  }
+});
+
 app.get("/resources", (req, res) => {
   res.render("index", { years: years, page: "resources", year: null });
 });

@@ -1,0 +1,41 @@
+<main class="content">
+    <div class="user-images d-flex align-items-center" style="width:70%;">
+        <form class="text-white add-com-photo">
+            <div class="classof">
+                Class of <%= year %>
+            </div>
+            <div class="wrapper">
+                    <div class="d-flex justify-content-center">
+                        <img id="community-image" class="" src="images/pfp.png" alt="hello world">                
+                    </div> 
+            </div>
+            <div class="mb-1">
+            <label for="community-image-upload" class="form-label mb-1">Image</label> 
+            <div class = "d-flex justify-content-between">
+                <input class="form-control bg-dark text-white col-8" style="display:inline-block" type="file" id="community-image-upload" name="imageFile" accept="image/*">
+                <button type="submit" class="btn btn-primary ">Submit</button>
+            </div>
+            </div>
+            <div class="d-flex p-1 justify-content-end">
+            </div>
+       </form>
+</main>
+
+<script>
+
+        document.getElementById('community-image-upload').addEventListener('change', loadImage);
+
+        function loadImage(event) {
+        var file = event.target.files[0];
+        var reader = new FileReader();
+
+        reader.onload = function(e) {
+            document.getElementById('community-image').src = e.target.result;
+        };
+
+        reader.readAsDataURL(file);
+        }
+
+
+
+</script>

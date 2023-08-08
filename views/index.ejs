@@ -43,7 +43,9 @@
       <%- include('./Resources.ejs') %>
     <% }else if(page === 'member') { %>
       <%- include('./Member.ejs', { year: year }) %>
-    <% } else if(page === 'community') { %>
+    <% } else if(page === 'community-photo') { %>
+      <%- include('./Community-Photo.ejs', { year: year }) %>
+    <% }else if(page === 'community') { %>
       <%- include('./Community.ejs', { year: year, images:images}) %>
     <% }else { %>
       <%- include('./Landing.ejs') %>

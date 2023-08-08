@@ -135,7 +135,16 @@ width: 150px;
     display: inline-block;
 }
 
+
 .wrapper{
     text-align: center;
 
+}
+
+.add-com-photo{
+    margin:auto;
+}
+
+#community-image{
+    height: 250px;
 }

@@ -7,6 +7,7 @@
     </div>
 
     <div class="user-images  d-flex flex-wrap justify-content-around">
+        <div class="d-flex flex-wrap justify-content-around">
         <% images.forEach(function(image) { %>
             <% image.imagesLinks.forEach(function(link) { %>
                 <div class="p-1">
@@ -14,7 +15,12 @@
                 </div>
             <% }); %>
         <% }); %>
+        </div>
+        <div class="add-member-button row mx-0 p-2">
+            <a href="/add-community-photo?year=<%= year %>" class="btn btn-primary w-10 m-auto">Add Photo</a>
+        </div>
     </div>
+
 
 </main>
 

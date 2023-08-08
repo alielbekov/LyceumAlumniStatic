@@ -24,3 +24,4 @@ $(".bd-example-modal-lg").on("hidden.bs.modal", function () {
   window.removeEventListener("popstate", closeModalOnBack); // Remove the popstate event listener
   history.back(); // Go back to the previous URL
 });
+
