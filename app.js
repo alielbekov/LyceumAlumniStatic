@@ -90,7 +90,7 @@ app.get("/teachers", (req, res) => {
 });
 
 app.get("/:year", (req, res) => {
-  const year = req.params.year;
+  const year = Number(req.params.year);
   // Validate year if needed
   User.find({ gradYear: year, isTeacher: false })
     .then((students) => {
@@ -226,7 +226,7 @@ app.post("/update-poll", checkAuth, (req, res) => {
                       const user = new User({
                         firstName: fName,
                         lastName: lName,
-                        gradYear: gradYear,
+                        gradYear: Number(gradYear),
                         image: fileName,
                       });
 
