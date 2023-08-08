@@ -260,6 +260,14 @@ alumni_bot.on("poll_answer", async (ctx) => {
   }
 });
 
+function handleCommunityImagePost(){
+
+}
+
+function handleNewMemberPost(){
+  
+}
+
 function generateConfirmationMessage(userDetails) {
   const { firstName, lastName, graduateYear } = userDetails;
   return `First Name: ${firstName}

@@ -1,9 +1,10 @@
 <main class="content">
     <div class="user-images d-flex align-items-center" style="width:70%;">
-        <form class="text-white add-com-photo">
+        <form class="text-white add-com-photo" method="POST" action="/add-community-photo" enctype="multipart/form-data">
             <div class="classof">
                 Class of <%= year %>
             </div>
+            <input type="hidden" name="year" value="<%= year %>">
             <div class="wrapper">
                     <div class="d-flex justify-content-center">
                         <img id="community-image" class="" src="images/pfp.png" alt="hello world">                
@@ -12,7 +13,7 @@
             <div class="mb-1">
             <label for="community-image-upload" class="form-label mb-1">Community Image</label> 
             <div class = "d-flex justify-content-between">
-                <input class="form-control bg-dark text-white col-8" style="display:inline-block" type="file" id="community-image-upload" name="imageFile" accept="image/*">
+                <input class="form-control bg-dark text-white col-8" style="display:inline-block" type="file" id="community-image-upload" name="community-image-upload" accept="image/*" required>
                 <button type="submit" class="btn btn-primary ">Submit</button>
             </div>
             </div>
@@ -27,6 +28,14 @@
 
         function loadImage(event) {
         var file = event.target.files[0];
+        var maxSizeMB = 5;
+        var maxSizeBytes = maxSizeMB * 1024 * 1024;
+
+        if (file.size > maxSizeBytes) {
+            alert('File size exceeds ' + maxSizeMB + 'MB. Please select a smaller file.');
+            return;
+        }
+
         var reader = new FileReader();
 
         reader.onload = function(e) {
@@ -34,8 +43,6 @@
         };
 
         reader.readAsDataURL(file);
-        }
-
-
+    }
 
 </script>

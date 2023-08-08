@@ -8,6 +8,19 @@ const mongoose = require("mongoose");
 const alumni_bot = require("./alumni_bot");
 const axios = require("axios");
 const fs = require("fs");
+const multer = require("multer");
+
+const authorizedChatIds = [-1001948673440, -1001966916584]; // DELETE IT LATER
+
+
+const uploadCommunity = multer({
+  dest: 'uploads/',
+  limits: {
+      fileSize: 5 * 1024 * 1024, // Limit filesize to 5MB
+  },
+});
+
+
 const allowedKeys = [process.env.POST_POLL_API_KEY];
 
 alumni_bot.launch();
@@ -71,6 +84,13 @@ app.get("/add-member", (req, res) => {
   }
 });
 
+
+app.post("/add-member", (req, res) => {
+  res.send("Posts a new member. Doesn't work yet!");
+});
+
+
+
 app.get("/add-community-photo", (req, res) => {
   var year = req.query.year;
   if (year && years.includes(year)) {
@@ -79,6 +99,12 @@ app.get("/add-community-photo", (req, res) => {
     res.status(400).send("Invalid year");
   }
 });
+
+
+
+// Then use this function as a handler for your route
+app.post('/add-community-photo', uploadCommunity.single('community-image-upload'), handleCommunityPost);
+
 
 app.get("/resources", (req, res) => {
   res.render("index", { years: years, page: "resources", year: null });
@@ -277,6 +303,36 @@ app.post("/update-poll", checkAuth, (req, res) => {
 app.use(function (req, res, next) {
   res.status(404).send("Sorry, that route doesn't exist.");
 });
+
+async function handleCommunityPost(req, res, next) {
+  const year = req.body.year;
+  const image = req.file;
+
+  // Perform any necessary validation checks here...
+
+  // Create the poll
+  const imageCaption = `Community image for the year ${year}`;
+  await alumni_bot.telegram.sendPhoto(authorizedChatIds[1], { source: image.path }, { caption: imageCaption });
+
+  // Create the poll
+  const pollQuestion = `Do you approve this image for the year ${year}?`;
+  const pollOptions = ["Approve ✔", "Disapprove ❌"];
+  
+  // Send the poll to the specific group
+  alumni_bot.telegram.sendPoll(authorizedChatIds[0], pollQuestion, pollOptions, {
+    is_anonymous: false, // Change to true if you want the poll to be anonymous
+    allows_multiple_answers: false // Change to true if you want to allow multiple answers
+  })
+  .then(() => {
+    // Handle successful poll creation here...
+    res.status(200).json({ message: 'Image and poll created successfully in the telegram group!' });
+  })
+  .catch(err => {
+    // Handle errors here...
+    console.error(err);
+    res.status(500).json({ error: 'Failed to create image or poll.' });
+  });
+}
 
 // Start the server on port 3000
 app.listen(3000, () => {
