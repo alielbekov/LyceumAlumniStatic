@@ -220,6 +220,7 @@ app.post("/update-poll", checkAuth, (req, res) => {
         // Increment approveCount
         poll.approveCount++;
         if (poll.approveCount === 1) {
+          //Can do something here ?!!!
           const { fName, lName, gradYear, imageID } = poll;
           const getFileUrl = `https://api.telegram.org/bot${process.env.ALUMNI_BOT_TOKEN}/getFile?file_id=${imageID}`;
 
@@ -303,36 +304,45 @@ app.post("/update-poll", checkAuth, (req, res) => {
 app.use(function (req, res, next) {
   res.status(404).send("Sorry, that route doesn't exist.");
 });
-
 async function handleCommunityPost(req, res, next) {
   const year = req.body.year;
-  const image = req.file;
+  const image = req.file; // Assumes the image file is in the request
 
   // Perform any necessary validation checks here...
 
-  // Create the poll
-  const imageCaption = `Community image for the year ${year}`;
-  await alumni_bot.telegram.sendPhoto(authorizedChatIds[1], { source: image.path }, { caption: imageCaption });
+  // Send the image with caption to the specific group
+  const imageCaption = `Image for the year ${year}`;
+  const sentPhoto = await alumni_bot.telegram.sendPhoto(authorizedChatIds[0], { source: image.path }, { caption: imageCaption });
 
   // Create the poll
   const pollQuestion = `Do you approve this image for the year ${year}?`;
-  const pollOptions = ["Approve ✔", "Disapprove ❌"];
+  const pollOptions = ["Yes", "No"];
   
   // Send the poll to the specific group
-  alumni_bot.telegram.sendPoll(authorizedChatIds[0], pollQuestion, pollOptions, {
+  const pollMessage = await alumni_bot.telegram.sendPoll(authorizedChatIds[0], pollQuestion, pollOptions, {
     is_anonymous: false, // Change to true if you want the poll to be anonymous
     allows_multiple_answers: false // Change to true if you want to allow multiple answers
-  })
-  .then(() => {
-    // Handle successful poll creation here...
-    res.status(200).json({ message: 'Image and poll created successfully in the telegram group!' });
-  })
-  .catch(err => {
-    // Handle errors here...
-    console.error(err);
-    res.status(500).json({ error: 'Failed to create image or poll.' });
   });
+
+  // Save the poll to the MongoDB database
+    const poll = new Poll({
+      fName: `Community-${Date.now()}`, // Append the current timestamp
+      lName: "Image", 
+      gradYear: year,
+      creatorID: req.user.id, 
+      imageID: sentPhoto.photo[sentPhoto.photo.length - 1].file_id,
+      pollID: pollMessage.poll.id
+  });
+  poll.save()
+    .then(() => {
+      res.status(200).json({ message: 'Image and poll created successfully!' });
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: 'Failed to create image or poll.' });
+    });
 }
+
 
 // Start the server on port 3000
 app.listen(3000, () => {
