@@ -46,11 +46,13 @@ const CommunityGallery = require("./models/community-gallery");
 const Poll = require("./models/poll");
 const Event = require("./models/landing-event");
 
+
 // Create an instance of express
 const app = express();
 
 // Set the view engine to ejs
 app.set("view engine", "ejs");
+app.set('trust proxy', true);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -221,61 +223,113 @@ app.post("/update-poll", checkAuth, (req, res) => {
         poll.approveCount++;
         if (poll.approveCount === 1) {
           //Can do something here ?!!!
-          const { fName, lName, gradYear, imageID } = poll;
-          const getFileUrl = `https://api.telegram.org/bot${process.env.ALUMNI_BOT_TOKEN}/getFile?file_id=${imageID}`;
+          if(poll.pollType===0){
+                  const { fName, lName, gradYear, imageID } = poll;
+                  const getFileUrl = `https://api.telegram.org/bot${process.env.ALUMNI_BOT_TOKEN}/getFile?file_id=${imageID}`;
 
-          axios
-            .get(getFileUrl)
-            .then((response) => {
-              const filePath = response.data.result.file_path;
-              const fileUrl = `https://api.telegram.org/file/bot${process.env.ALUMNI_BOT_TOKEN}/${filePath}`;
+                  axios
+                    .get(getFileUrl)
+                    .then((response) => {
+                      const filePath = response.data.result.file_path;
+                      const fileUrl = `https://api.telegram.org/file/bot${process.env.ALUMNI_BOT_TOKEN}/${filePath}`;
 
-              // Generate the file name using the specified format
-              const timestamp = Date.now();
-              const fileName = `/images/${gradYear}/${fName}${lName}${timestamp}.jpg`;
+                      // Generate the file name using the specified format
+                      const timestamp = Date.now();
+                      const fileName = `/images/${gradYear}/${fName}${lName}${timestamp}.jpg`;
 
-              // Create the graduate year folder if it doesn't exist
-              const yearFolderPath = __dirname + `/public/images/${gradYear}`;
-              if (!fs.existsSync(yearFolderPath)) {
-                fs.mkdirSync(yearFolderPath, { recursive: true });
-              }
+                      // Create the graduate year folder if it doesn't exist
+                      const yearFolderPath = __dirname + `/public/images/${gradYear}`;
+                      if (!fs.existsSync(yearFolderPath)) {
+                        fs.mkdirSync(yearFolderPath, { recursive: true });
+                      }
 
-              const savePath = __dirname + `/public/${fileName}`;
+                      const savePath = __dirname + `/public/${fileName}`;
 
-              axios({ url: fileUrl, responseType: "stream" })
-                .then((response) => {
-                  response.data
-                    .pipe(fs.createWriteStream(savePath))
-                    .on("finish", () => {
-                      console.log("Image saved:", fileName);
+                      axios({ url: fileUrl, responseType: "stream" })
+                        .then((response) => {
+                          response.data
+                            .pipe(fs.createWriteStream(savePath))
+                            .on("finish", () => {
+                              console.log("Image saved:", fileName);
 
-                      // Create a new user object
-                      const user = new User({
-                        firstName: fName,
-                        lastName: lName,
-                        gradYear: Number(gradYear),
-                        image: fileName,
-                      });
+                              // Create a new user object
+                              const user = new User({
+                                firstName: fName,
+                                lastName: lName,
+                                gradYear: Number(gradYear),
+                                image: fileName,
+                              });
 
-                      // Save the user object to the database
-                      user
-                        .save()
-                        .then((savedUser) => {
-                          console.log("User saved:", savedUser);
+                              // Save the user object to the database
+                              user
+                                .save()
+                                .then((savedUser) => {
+                                  console.log("User saved:", savedUser);
+                                })
+                                .catch((error) => {
+                                  console.error("Error saving user:", error);
+                                });
+                            })
+                            .on("error", (e) =>
+                              console.error("An error has occurred.", e)
+                            );
                         })
-                        .catch((error) => {
-                          console.error("Error saving user:", error);
-                        });
+                        .catch((error) =>
+                          console.error("Error getting the file:", error)
+                        );
                     })
-                    .on("error", (e) =>
-                      console.error("An error has occurred.", e)
-                    );
-                })
-                .catch((error) =>
-                  console.error("Error getting the file:", error)
-                );
-            })
-            .catch((error) => console.error("Error getting file path:", error));
+                    .catch((error) => console.error("Error getting file path:", error));
+            
+          }else if(poll.pollType==1){
+            
+              const { fName, lName, gradYear, imageID, approveCount } = poll;
+              if (approveCount === 1) {
+                const getFileUrl = `https://api.telegram.org/bot${process.env.ALUMNI_BOT_TOKEN}/getFile?file_id=${imageID}`;
+            
+                axios
+                  .get(getFileUrl)
+                  .then((response) => {
+                    const filePath = response.data.result.file_path;
+                    const fileUrl = `https://api.telegram.org/file/bot${process.env.ALUMNI_BOT_TOKEN}/${filePath}`;
+            
+                    // Generate the file name using the specified format
+                    const fileName = `/images/${gradYear}/community/${fName}${lName}.jpg`;
+            
+                    // Create the graduate year and community folders if they don't exist
+                    const communityFolderPath = path.join(__dirname, `/public/images/${gradYear}/community`);
+                    if (!fs.existsSync(communityFolderPath)) {
+                      fs.mkdirSync(communityFolderPath, { recursive: true });
+                    }
+            
+                    const savePath = path.join(__dirname, `/public/${fileName}`);
+            
+                    axios({ url: fileUrl, responseType: "stream" })
+                      .then((response) => {
+                        response.data
+                          .pipe(fs.createWriteStream(savePath))
+                          .on("finish", () => {
+                            // Save the user object to the database
+                            CommunityGallery.findOneAndUpdate(
+                              { year: gradYear },
+                              { $push: { imagesLinks: fileName } },
+                              { new: true, upsert: true }
+                            )
+                            .then(() => console.log('Image link added to CommunityGallery'))
+                            .catch(err => console.error('Error updating CommunityGallery:', err));
+                          })
+                          .on("error", (e) =>
+                            console.error("An error has occurred.", e)
+                          );
+                      })
+                      .catch((error) =>
+                        console.error("Error getting the file:", error)
+                      );
+                  })
+                  .catch((error) => console.error("Error getting file path:", error));
+              }
+            
+          }
+          
         }
         // Fetch fName, lName, gradYear, and imageID
         // Get the file details
@@ -305,6 +359,7 @@ app.use(function (req, res, next) {
   res.status(404).send("Sorry, that route doesn't exist.");
 });
 async function handleCommunityPost(req, res, next) {
+  const clientIP = req.ip || req.headers['x-forwarded-for'];
   const year = req.body.year;
   const image = req.file; // Assumes the image file is in the request
 
@@ -312,24 +367,27 @@ async function handleCommunityPost(req, res, next) {
 
   // Send the image with caption to the specific group
   const imageCaption = `Image for the year ${year}`;
-  const sentPhoto = await alumni_bot.telegram.sendPhoto(authorizedChatIds[0], { source: image.path }, { caption: imageCaption });
+  const sentPhoto = await alumni_bot.telegram.sendPhoto(authorizedChatIds[1], { source: image.path }, { caption: imageCaption });
 
   // Create the poll
   const pollQuestion = `Do you approve this image for the year ${year}?`;
   const pollOptions = ["Yes", "No"];
   
   // Send the poll to the specific group
-  const pollMessage = await alumni_bot.telegram.sendPoll(authorizedChatIds[0], pollQuestion, pollOptions, {
+  const pollMessage = await alumni_bot.telegram.sendPoll(authorizedChatIds[1], pollQuestion, pollOptions, {
     is_anonymous: false, // Change to true if you want the poll to be anonymous
     allows_multiple_answers: false // Change to true if you want to allow multiple answers
   });
 
   // Save the poll to the MongoDB database
+  console.log(sentPhoto.photo);
     const poll = new Poll({
-      fName: `Community-${Date.now()}`, // Append the current timestamp
+      pollType:1,
+      ipAddress:clientIP,
+      fName: `Community-${Date.now()}`,
       lName: "Image", 
       gradYear: year,
-      creatorID: req.user.id, 
+      creatorID: 0, 
       imageID: sentPhoto.photo[sentPhoto.photo.length - 1].file_id,
       pollID: pollMessage.poll.id
   });

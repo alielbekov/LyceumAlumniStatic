@@ -238,7 +238,7 @@ alumni_bot.on("poll_answer", async (ctx) => {
   if (isUserInGroup(user)) {
     const requestOptions = {
       method: "POST",
-      uri: "http://137.184.74.25:3000/update-poll", // Update the URL to your server's endpoint
+      uri: "https://zfxkyw-3000.csb.app/update-poll", // UPDATE URL FOR
       body: { pollId: pollId, option: chosenOption },
       json: true,
       headers: {

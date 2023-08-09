@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 
 const pollSchema = new mongoose.Schema({
+    pollType: {
+      type: Number,
+      required: true,
+      default: 0
+    },
     fName: {
       type: String,
       required: true
@@ -35,6 +40,10 @@ const pollSchema = new mongoose.Schema({
         type: Number,
         required: true,
         default: 0
+    },
+    ipAddress: {
+      type: String, // Store the IP address as a string
+      required: false // Make it optional if not all documents will have an IP address
     }
   });
   
