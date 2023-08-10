@@ -1,13 +1,13 @@
 // Import the necessary modules
 require("dotenv").config();
 const express = require("express");
+const fs = require('fs');
 const bodyParser = require("body-parser");
 const path = require("path");
 const ejs = require("ejs");
 const mongoose = require("mongoose");
 const alumni_bot = require("./alumni_bot");
 const axios = require("axios");
-const fs = require("fs");
 const multer = require("multer");
 
 const authorizedChatIds = [-1001948673440, -1001966916584]; // DELETE IT LATER
@@ -168,39 +168,44 @@ const checkAuth = (req, res, next) => {
 app.post("/poll", checkAuth, (req, res) => {
   // Your code for handling the POST request
   const pollData = req.body;
-  Poll.findOne({ fName: pollData.fName, lName: pollData.lName })
-    .then((existingPoll) => {
-      if (existingPoll) {
-        // A poll with the same name already exists, do not add a new one
+  if(pollData.pollType==0 ){
+          Poll.findOne({ fName: pollData.fName, lName: pollData.lName })
+            .then((existingPoll) => {
+              if (existingPoll) {
+                // A poll with the same name already exists, do not add a new one
 
-        return res.status(400).send("Poll with the same name already exists");
-      } else {
-        // No existing poll found, add the new poll to the database
-        const poll = new Poll({
-          fName: pollData.fName,
-          lName: pollData.lName,
-          gradYear: pollData.gradYear,
-          creatorID: pollData.creatorID,
-          imageID: pollData.imageID,
-          pollID: pollData.pollID,
-          approveCount: pollData.approveCount,
-          disapproveCount: pollData.disapproveCount,
-        });
+                return res.status(400).send("Poll with the same name already exists");
+              } else {
+                // No existing poll found, add the new poll to the database
+                const poll = new Poll({
+                  fName: pollData.fName,
+                  lName: pollData.lName,
+                  gradYear: pollData.gradYear,
+                  creatorID: pollData.creatorID,
+                  imageID: pollData.imageID,
+                  pollID: pollData.pollID,
+                  approveCount: pollData.approveCount,
+                  disapproveCount: pollData.disapproveCount,
+                });
 
-        // Save the new poll to the database
-        poll
-          .save()
-          .then((savedPoll) => {
-            res.status(200).send("New poll added to the database");
-          })
-          .catch((error) => {
-            res.status(500).send("Internal Server Error");
-          });
-      }
-    })
-    .catch((error) => {
-      res.status(500).send("Internal Server Error");
-    });
+                // Save the new poll to the database
+                poll
+                  .save()
+                  .then((savedPoll) => {
+                    res.status(200).send("New poll added to the database");
+                  })
+                  .catch((error) => {
+                    res.status(500).send("Internal Server Error");
+                  });
+              }
+            })
+            .catch((error) => {
+              res.status(500).send("Internal Server Error");
+            });
+  }else if(pollData.pollType==1){
+    console.log("saving bot community photo");
+
+  }
   console.log("Damn That works!");
 });
 
@@ -376,11 +381,11 @@ async function handleCommunityPost(req, res, next) {
   // Send the poll to the specific group
   const pollMessage = await alumni_bot.telegram.sendPoll(authorizedChatIds[1], pollQuestion, pollOptions, {
     is_anonymous: false, // Change to true if you want the poll to be anonymous
-    allows_multiple_answers: false // Change to true if you want to allow multiple answers
+    allows_multiple_answers: false,
+    open_period: 300
   });
 
   // Save the poll to the MongoDB database
-  console.log(sentPhoto.photo);
     const poll = new Poll({
       pollType:1,
       ipAddress:clientIP,
@@ -394,6 +399,14 @@ async function handleCommunityPost(req, res, next) {
   poll.save()
     .then(() => {
       res.status(200).json({ message: 'Image and poll created successfully!' });
+
+      fs.unlink(image.path, (err) => {
+        if (err) {
+          console.error('Error deleting temporary file:', err);
+        } else {
+          console.log('Temporary file deleted successfully');
+        }
+      });
     })
     .catch(err => {
       console.error(err);

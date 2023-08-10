@@ -107,6 +107,18 @@ alumni_bot.command("add", (ctx) => {
   }
 });
 
+alumni_bot.command("addImage", (ctx) => {
+  ctx.session = {};
+
+  if (isChatAuthorized(ctx.chat.id)) {
+    ctx.reply("Welcome!\n\nPlease enter the community's graduation year::");
+    ctx.session.state = "awaitingCommunityGraduationYear";
+    // Set the bot's state to 'awaitingFirstName'
+  } else {
+    ctx.reply("Unauthorized access.");
+  }
+});
+
 alumni_bot.on("text", async (ctx) => {
   // Check if the chat ID is authorized
   //isChatAuthorized(ctx.chat.id)
@@ -133,36 +145,36 @@ alumni_bot.on("text", async (ctx) => {
           ctx.reply("Please enter a valid last name:");
         }
         break;
-        case "awaitingGraduateYear":
-          const graduateYear = parseInt(message);
-          if (isValidGraduateYear(graduateYear)) {
-            const userDetails = {
-              firstName: ctx.session.firstName,
-              lastName: ctx.session.lastName,
-              graduateYear: graduateYear,
-            };
-            const confirmationMessage = generateConfirmationMessage(userDetails);
-        
-            await ctx.replyWithPhoto(ctx.session.imageFileId, {
-              caption: confirmationMessage,
-            });
-        
-            ctx.replyWithPoll(
-              "Do you approve?",
-              ["Approve ✔", "Disapprove ❌"],
-              { is_anonymous: false, open_period: 300 }
-            ).then(async (pollMessage) => {
+      case "awaitingGraduateYear":
+        const graduateYear = parseInt(message);
+        if (isValidGraduateYear(graduateYear)) {
+          const userDetails = {
+            firstName: ctx.session.firstName,
+            lastName: ctx.session.lastName,
+            graduateYear: graduateYear,
+          };
+          const confirmationMessage = generateConfirmationMessage(userDetails);
+
+          await ctx.replyWithPhoto(ctx.session.imageFileId, {
+            caption: confirmationMessage,
+          });
+
+          ctx
+            .replyWithPoll("Do you approve?", ["Approve ✔", "Disapprove ❌"], {
+              is_anonymous: false,
+              open_period: 300,
+            })
+            .then(async (pollMessage) => {
               const poll = new Poll({
+                pollType:0,
                 fName: userDetails.firstName,
                 lName: userDetails.lastName,
                 gradYear: userDetails.graduateYear,
                 creatorID: ctx.from.id,
                 imageID: ctx.session.imageFileId,
-                pollID: pollMessage.poll.id
-              })
+                pollID: pollMessage.poll.id,
+              });
 
-        
-            
               const requestOptions = {
                 method: "POST",
                 uri: "http://137.184.74.25:3000/poll", // Update the URL to your server's endpoint
@@ -172,7 +184,7 @@ alumni_bot.on("text", async (ctx) => {
                   Authorization: process.env.POST_POLL_API_KEY, // Replace with your API key
                 },
               };
-        
+
               //Make request with poll body
               try {
                 await request(requestOptions, (error, response, body) => {
@@ -187,18 +199,28 @@ alumni_bot.on("text", async (ctx) => {
                 console.error("Error making the POST request:", error);
               }
               // Clear the session state
-            }).catch(error => {
+            })
+            .catch((error) => {
               console.log(error);
             });
-        
-          } else {
-            ctx.reply("Please enter a valid graduate year:");
-          }
-          break;
-        
+        } else {
+          ctx.reply("Please enter a valid graduate year:");
+        }
+        break;
+      case "awaitingCommunityGraduationYear":
+        const communityGraduationYear = parseInt(message);
+        if (isValidGraduateYear(communityGraduationYear)) {
+          ctx.session.communityGraduationYear = communityGraduationYear;
+          ctx.session.state = "waitingGradCommunityImage";
+          ctx.reply("Please send an image!");
+        } else {
+          ctx.reply("Grad year is wrong or not supported!");
+        }
+        break;
+      case "waitingGradCommunityImage":
+        break;
     }
-  }
-   else {
+  } else {
     //ctx.reply("Unauthorized access.");
   }
 });
@@ -206,39 +228,65 @@ alumni_bot.on("text", async (ctx) => {
 alumni_bot.on("photo", async (ctx) => {
   if (isChatAuthorized(ctx.chat.id) && ctx.session) {
     const state = ctx.session.state;
+    console.log("state: " + state);
     if (state === "awaitingImage") {
       // Validate the image
       if (await isValidImage(ctx, 200000)) {
         // Max size: 200KB
-        const imageFileId =
-          ctx.message.photo[ctx.message.photo.length - 1].file_id;
+        const imageFileId = ctx.message.photo[ctx.message.photo.length - 1].file_id;
         // Store the image file ID in the session
         ctx.session.imageFileId = imageFileId;
 
         ctx.reply("Please enter your graduate year:");
         ctx.session.state = "awaitingGraduateYear";
       } else {
-        ctx.reply(
-          "The image is invalid. Currently, we cannot support large files. Use a telegram profile image please."
+        ctx.reply("The image is invalid. Currently, we cannot support large files. Use a telegram profile image please.");
+      }
+    } else if (state === "waitingGradCommunityImage") {
+      console.log("30000000 not passed");
+
+      if (await isValidCommunityImage(ctx, 3000000)) {
+
+        const imageFileId = ctx.message.photo[ctx.message.photo.length - 1].file_id;
+        const gradYear = parseInt(ctx.session.communityGraduationYear);
+
+
+
+
+
+        const imageCaption = `Image for the year ${gradYear}`;
+        await ctx.telegram.sendPhoto(authorizedChatIds[1], imageFileId, imageCaption);
+
+        const pollQuestion = `Do you approve this image for the year ${gradYear}?`;
+        const pollOptions = ["Yes", "No"];
+
+        const pollMessage = await ctx.telegram.sendPoll(
+          authorizedChatIds[1],
+          pollQuestion,
+          pollOptions,
+          {
+            is_anonymous: false, // Change to true if you want the poll to be anonymous
+            allows_multiple_answers: false,
+            open_period: 300
+          }
         );
       }
-    } else {
-      // Do nothing
     }
   } else {
-    //ctx.reply("Unauthorized access.");
+    ctx.reply("Unauthorized access.");
   }
 });
 
+
 alumni_bot.on("poll_answer", async (ctx) => {
   const pollId = ctx.update.poll_answer.poll_id;
-  
+
   const user = ctx.update.poll_answer.user;
   const chosenOption = ctx.update.poll_answer.option_ids[0];
   if (isUserInGroup(user)) {
     const requestOptions = {
       method: "POST",
-      uri: "https://zfxkyw-3000.csb.app/update-poll", // UPDATE URL FOR
+      uri: "http://localhost:3000/update-poll", // UPDATE URL FOR
       body: { pollId: pollId, option: chosenOption },
       json: true,
       headers: {
@@ -260,13 +308,9 @@ alumni_bot.on("poll_answer", async (ctx) => {
   }
 });
 
-function handleCommunityImagePost(){
+function handleCommunityImagePost() {}
 
-}
-
-function handleNewMemberPost(){
-  
-}
+function handleNewMemberPost() {}
 
 function generateConfirmationMessage(userDetails) {
   const { firstName, lastName, graduateYear } = userDetails;
@@ -298,7 +342,19 @@ async function isValidImage(ctx, maxSize) {
   const photoSize = image.file_size;
   const fileId = image.file_id;
   // Reality check
+
   if (photoSize < maxSize && Math.abs(photoWidth - photoHeight) < 10) {
+    return true;
+  }
+  return false;
+}
+
+
+async function isValidCommunityImage(ctx, maxSize) {
+  const image = ctx.message.photo[ctx.message.photo.length - 1];
+  const photoSize = image.file_size;
+
+  if (photoSize < maxSize) {
     return true;
   }
   return false;
