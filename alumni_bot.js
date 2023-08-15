@@ -243,14 +243,26 @@ alumni_bot.on("photo", async (ctx) => {
         ctx.reply("The image is invalid. Currently, we cannot support large files. Use a telegram profile image please.");
       }
     } else if (state === "waitingGradCommunityImage") {
-      console.log("30000000 not passed");
 
       if (await isValidCommunityImage(ctx, 3000000)) {
-
+        console.log("here image passed")
         const imageFileId = ctx.message.photo[ctx.message.photo.length - 1].file_id;
         const gradYear = parseInt(ctx.session.communityGraduationYear);
+        console.log(ctx.message.from);
+        console.log(session.communityGraduationYear);
+        console.log(imageFileId);
+        
 
 
+        const poll = new Poll({
+          pollType:1,
+          fName: userDetails.firstName,
+          lName: userDetails.lastName,
+          gradYear: Number(session.communityGraduationYear),
+          creatorID: ctx.from.id,
+          imageID: ctx.session.imageFileId,
+          pollID: pollMessage.poll.id,
+        });
 
 
 
