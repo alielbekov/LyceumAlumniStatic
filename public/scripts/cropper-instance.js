@@ -76,8 +76,11 @@ return new Promise((resolve, reject) => {
 }
 
 function crop(){
-    const canvas = cropper.getCroppedCanvas();
-    outputImage.src = canvas.toDataURL("image/png"); // Converts the canvas to an image and put it in the output image
+  const canvas = cropper.getCroppedCanvas();
+  const croppedImageUrl = canvas.toDataURL("image/png"); // Converts the canvas to an image
+  
+  outputImage.src = croppedImageUrl; // Put it in the output image
+  document.getElementById('srcInput').value = croppedImageUrl; // Set the hidden input's value to the cropped image's URL
 }
 
 

@@ -107,7 +107,7 @@ alumni_bot.command("add", (ctx) => {
   }
 });
 
-alumni_bot.command("addImage", (ctx) => {
+alumni_bot.command("addCommunityImage", (ctx) => {
   ctx.session = {};
 
   if (isChatAuthorized(ctx.chat.id)) {
@@ -214,7 +214,7 @@ alumni_bot.on("text", async (ctx) => {
           ctx.session.state = "waitingGradCommunityImage";
           ctx.reply("Please send an image!");
         } else {
-          ctx.reply("Grad year is wrong or not supported!");
+          ctx.reply("Grad year is wrong or not supported! Try again!");
         }
         break;
       case "waitingGradCommunityImage":
@@ -248,40 +248,62 @@ alumni_bot.on("photo", async (ctx) => {
         console.log("here image passed")
         const imageFileId = ctx.message.photo[ctx.message.photo.length - 1].file_id;
         const gradYear = parseInt(ctx.session.communityGraduationYear);
-        console.log(ctx.message.from);
-        console.log(session.communityGraduationYear);
-        console.log(imageFileId);
-        
-
-
-        const poll = new Poll({
-          pollType:1,
-          fName: userDetails.firstName,
-          lName: userDetails.lastName,
-          gradYear: Number(session.communityGraduationYear),
-          creatorID: ctx.from.id,
-          imageID: ctx.session.imageFileId,
-          pollID: pollMessage.poll.id,
-        });
-
-
-
         const imageCaption = `Image for the year ${gradYear}`;
+
         await ctx.telegram.sendPhoto(authorizedChatIds[1], imageFileId, imageCaption);
 
         const pollQuestion = `Do you approve this image for the year ${gradYear}?`;
         const pollOptions = ["Yes", "No"];
-
         const pollMessage = await ctx.telegram.sendPoll(
           authorizedChatIds[1],
           pollQuestion,
           pollOptions,
           {
-            is_anonymous: false, // Change to true if you want the poll to be anonymous
+            is_anonymous: false, 
             allows_multiple_answers: false,
             open_period: 300
           }
-        );
+        ).then(async (pollMessage) =>{
+        
+          const poll = new Poll({
+            pollType:1,
+            fName: ctx.message.from.first_name,
+            lName:  ctx.message.from.last_name || '',
+            gradYear: gradYear,
+            creatorID: ctx.message.from.id,
+            imageID: imageFileId,
+            pollID: pollMessage.poll.id,
+          });
+
+          const requestOptions = {
+            method: "POST",
+            uri: "http://localhost:3000/poll", // Update the URL to your server's endpoint
+            body: poll,
+            json: true,
+            headers: {
+              Authorization: process.env.POST_POLL_API_KEY, // Replace with your API key
+            },
+          };
+
+          try {
+            await request(requestOptions, (error, response, body) => {
+              if (error) {
+                console.error("Error making the POST request:", error);
+              } else {
+                console.log(body); // Log the response body from your server
+                ctx.session.state = "";
+              }
+            });
+          } catch (error) {
+            console.error("Error making the POST request:", error);
+          }
+        }).catch((error)=>{
+        console.log(error);
+
+        })
+
+
+
       }
     }
   } else {

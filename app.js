@@ -9,16 +9,16 @@ const mongoose = require("mongoose");
 const alumni_bot = require("./alumni_bot");
 const axios = require("axios");
 const multer = require("multer");
-
 const authorizedChatIds = [-1001948673440, -1001966916584]; // DELETE IT LATER
 
 
-const uploadCommunity = multer({
+const uploadImage = multer({
   dest: 'uploads/',
   limits: {
       fileSize: 5 * 1024 * 1024, // Limit filesize to 5MB
   },
 });
+
 
 
 const allowedKeys = [process.env.POST_POLL_API_KEY];
@@ -54,8 +54,10 @@ const app = express();
 app.set("view engine", "ejs");
 app.set('trust proxy', true);
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+
+
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/cropper", express.static("node_modules/cropperjs/dist/"));
@@ -87,8 +89,59 @@ app.get("/add-member", (req, res) => {
 });
 
 
-app.post("/add-member", (req, res) => {
-  res.send("Posts a new member. Doesn't work yet!");
+
+
+app.post('/add-member', uploadImage.single('image'), (req, res) => {
+  if (!req.body.src) {
+    return res.status(400).send('No image provided');
+  }
+
+  const img = req.body.src; // base64 encoded image
+  const clientIP = req.ip || req.headers['x-forwarded-for'];
+  const fname = req.body.fname;
+  const lname = req.body.lname;
+  const gradYear = req.body.gradYear;  
+  const base64String = req.body.src.split(',')[1];
+
+  const buffer = Buffer.from(base64String, 'base64');
+
+  // Generate a filename
+  const filename = `uploads/${fname}-${lname}-${Date.now()}.png`;
+  fs.writeFile(filename, buffer, (err) => {
+    if (err) {
+      console.error('An error occurred:', err);
+      return res.status(500).send('An error occurred while saving the image.');
+    }
+
+    console.log('Image saved:', filename);
+    res.send('Image saved successfully.');
+  });
+
+
+
+});
+
+
+
+app.delete("/delete-member", (req, res) => {
+  const { link, year, password } = req.body;
+  if (password === process.env.DELETE_AUTH) {
+    // Find and delete the user by gradYear and image link
+    User.deleteOne({ gradYear: year, image: link })
+      .then((result) => {
+        if (result.deletedCount > 0) {
+          res.json({ success: true });
+        } else {
+          res.status(404).json({ success: false, message: 'User not found' });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+      });
+  } else {
+    res.json({ success: false, message: 'Incorrect password' });
+  }
 });
 
 
@@ -105,7 +158,45 @@ app.get("/add-community-photo", (req, res) => {
 
 
 // Then use this function as a handler for your route
-app.post('/add-community-photo', uploadCommunity.single('community-image-upload'), handleCommunityPost);
+app.post('/add-community-photo', uploadImage.single('community-image-upload'), handleCommunityPost);
+
+app.delete("/delete-community-photo", (req, res) => {
+  const { link, year, password } = req.body;
+  if (password === process.env.DELETE_AUTH) {
+    // Find the community gallery by year
+    CommunityGallery.findOne({ year: year })
+      .then((community) => {
+        if (community) {
+          // Find the index of the link to be deleted
+          const index = community.imagesLinks.indexOf(link);
+          if (index > -1) {
+            // Remove the link from the array
+            community.imagesLinks.splice(index, 1);
+            
+            // Save the updated document
+            community.save()
+              .then(() => {
+                res.json({ success: true });
+              })
+              .catch((error) => {
+                console.log(error);
+                res.status(500).json({ success: false, message: 'Failed to save changes' });
+              });
+          } else {
+            res.status(404).json({ success: false, message: 'Link not found' });
+          }
+        } else {
+          res.status(404).json({ success: false, message: 'Year not found' });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+      });
+  } else {
+    res.json({ success: false, message: 'Incorrect password' });
+  }
+});
 
 
 app.get("/resources", (req, res) => {
@@ -202,11 +293,28 @@ app.post("/poll", checkAuth, (req, res) => {
             .catch((error) => {
               res.status(500).send("Internal Server Error");
             });
-  }else if(pollData.pollType==1){
-    console.log("saving bot community photo");
+  }else if(pollData.pollType===1){
+    console.log("I was here")
+    const poll = new Poll({
+      fName: pollData.fName,
+      lName: pollData.lName,
+      gradYear: pollData.gradYear,
+      creatorID: pollData.creatorID,
+      imageID: pollData.imageID,
+      pollID: pollData.pollID,
+      approveCount: pollData.approveCount,
+      disapproveCount: pollData.disapproveCount,
+      pollType:1
+    });
+    poll.save()
+    .then((savedPoll) => {
+      res.status(200).send("New poll added to the database");
+    })
+    .catch((error) => {
+      res.status(500).send("Internal Server Error");
+    });;
 
   }
-  console.log("Damn That works!");
 });
 
 app.post("/update-poll", checkAuth, (req, res) => {
@@ -286,6 +394,7 @@ app.post("/update-poll", checkAuth, (req, res) => {
                     .catch((error) => console.error("Error getting file path:", error));
             
           }else if(poll.pollType==1){
+            console.log("Please select I was here");
             
               const { fName, lName, gradYear, imageID, approveCount } = poll;
               if (approveCount === 1) {
@@ -302,6 +411,7 @@ app.post("/update-poll", checkAuth, (req, res) => {
             
                     // Create the graduate year and community folders if they don't exist
                     const communityFolderPath = path.join(__dirname, `/public/images/${gradYear}/community`);
+                    console.log(communityFolderPath);
                     if (!fs.existsSync(communityFolderPath)) {
                       fs.mkdirSync(communityFolderPath, { recursive: true });
                     }
@@ -414,6 +524,15 @@ async function handleCommunityPost(req, res, next) {
     });
 }
 
+async function handleMemberPost(req, res, next) {
+
+  const clientIP = req.ip || req.headers['x-forwarded-for'];
+  console.log(body)
+
+
+
+
+}
 
 // Start the server on port 3000
 app.listen(3000, () => {

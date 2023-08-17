@@ -6,15 +6,16 @@
             <button class="btn btn-secondary gallery">Community Gallery</button>
     </div>
 
-    <div class="user-images  d-flex flex-wrap justify-content-around">
+    <div class="user-images">
         <div class="classof">
             Community Gallery
           </div>
-        <div class="d-flex flex-wrap justify-content-around">
+        <div class="d-flex flex-wrap justify-content-around">            
         <% images.forEach(function(image) { %>
             <% image.imagesLinks.forEach(function(link) { %>
-                <div class="p-1">
+                <div class="p-1 position-relative image-container">
                     <img class="gallery-image" src="<%= link %>" onclick="openModal('<%= link %>')"alt="communityImage.jpg">
+                    <button class="btn btn-danger position-absolute delete-button" onclick="deleteCommunityImage('<%= link %>', '<%= year %>')">x</button>
                 </div>
             <% }); %>
         <% }); %>
