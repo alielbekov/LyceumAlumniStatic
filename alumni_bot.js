@@ -320,6 +320,7 @@ alumni_bot.on("poll_answer", async (ctx) => {
   if (isUserInGroup(user)) {
     const requestOptions = {
       method: "POST",
+      // 137.184.74.25
       uri: "http://137.184.74.25:3000/update-poll", // UPDATE URL FOR
       body: { pollId: pollId, option: chosenOption },
       json: true,
