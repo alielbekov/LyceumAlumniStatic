@@ -9,7 +9,7 @@ const mongoose = require("mongoose");
 const alumni_bot = require("./alumni_bot");
 const axios = require("axios");
 const multer = require("multer");
-const authorizedChatIds = [-1001948673440, -1001966916584]; // DELETE IT LATER
+const authorizedChatIds = [-1001966916584, -1001948673440]; // DELETE IT LATER
 
 
 const uploadImage = multer({
@@ -91,9 +91,10 @@ app.get("/add-member", (req, res) => {
 
 
 
-app.post('/add-member', uploadImage.single('image'), (req, res) => {
-  if (!req.body.src) {
-    return res.status(400).send('No image provided');
+app.post('/add-member', (req, res) => {
+  const base64ImagePattern = /^data:image\/[a-zA-Z]+;base64,[^\s]+$/;
+  if (!req.body.src || !base64ImagePattern.test(req.body.src)) {
+    return res.status(400).send('Invalid or no image provided');
   }
 
   const img = req.body.src; // base64 encoded image
@@ -103,21 +104,60 @@ app.post('/add-member', uploadImage.single('image'), (req, res) => {
   const gradYear = req.body.gradYear;  
   const base64String = req.body.src.split(',')[1];
 
+  const imageCaption = `First Name: ${fname}
+Last Name: ${lname}
+Graduate Year: ${gradYear}
+  `;
+
   const buffer = Buffer.from(base64String, 'base64');
 
   // Generate a filename
   const filename = `uploads/${fname}-${lname}-${Date.now()}.png`;
-  fs.writeFile(filename, buffer, (err) => {
+  fs.writeFile(filename, buffer, async (err) => {
     if (err) {
       console.error('An error occurred:', err);
       return res.status(500).send('An error occurred while saving the image.');
     }
 
-    console.log('Image saved:', filename);
-    res.send('Image saved successfully.');
+    const sentPhoto = await alumni_bot.telegram.sendPhoto(authorizedChatIds[1], { source: filename }, { caption: imageCaption });
+    const pollQuestion = `Do you approve this member?`;
+    const pollOptions = ["Yes", "No"];
+    
+    // Send the poll to the specific group
+    const pollMessage = await alumni_bot.telegram.sendPoll(authorizedChatIds[1], pollQuestion, pollOptions, {
+      is_anonymous: false, // Change to true if you want the poll to be anonymous
+      allows_multiple_answers: false,
+      open_period: 300
+    });
+
+      // Save the poll to the MongoDB database
+      const poll = new Poll({
+        pollType:0,
+        ipAddress:clientIP,
+        fName: fname,
+        lName: lname, 
+        gradYear: gradYear,
+        creatorID: 0, 
+        imageID: sentPhoto.photo[sentPhoto.photo.length - 1].file_id,
+        pollID: pollMessage.poll.id
+    });
+    poll.save()
+      .then(() => {
+        res.status(200).json({ message: 'Image and poll created successfully!' });
+  
+        fs.unlink(filename, (err) => {
+          if (err) {
+            console.error('Error deleting temporary file:', err);
+          } else {
+            console.log('Temporary file deleted successfully');
+          }
+        });
+      })
+      .catch(err => {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to create image or poll.' });
+      });
   });
-
-
 
 });
 

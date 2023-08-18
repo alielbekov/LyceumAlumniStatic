@@ -81,6 +81,8 @@ function crop(){
   
   outputImage.src = croppedImageUrl; // Put it in the output image
   document.getElementById('srcInput').value = croppedImageUrl; // Set the hidden input's value to the cropped image's URL
+  document.getElementById('errorMessage').innerText = '';
+
 }
 
 

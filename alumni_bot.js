@@ -5,7 +5,7 @@ const request = require("request");
 const e = require("express");
 const Poll = require("./models/poll");
 // Change this array to include the chat IDs where you want your new bot to operate
-const authorizedChatIds = [-1001948673440, -1001966916584];
+const authorizedChatIds = [-1001966916584, -1001948673440];
 
 // Change BOT_TOKEN to the token of your new bot
 const alumni_bot = new Telegraf(process.env.ALUMNI_BOT_TOKEN);
@@ -160,7 +160,7 @@ alumni_bot.on("text", async (ctx) => {
           });
 
           ctx
-            .replyWithPoll("Do you approve?", ["Approve ✔", "Disapprove ❌"], {
+            .replyWithPoll("Do you approve this member?", ["Yes", "No"], {
               is_anonymous: false,
               open_period: 300,
             })
@@ -277,7 +277,7 @@ alumni_bot.on("photo", async (ctx) => {
 
           const requestOptions = {
             method: "POST",
-            uri: "http://localhost:3000/poll", // Update the URL to your server's endpoint
+            uri: "http://137.184.74.25:3000/poll", // Update the URL to your server's endpoint
             body: poll,
             json: true,
             headers: {
@@ -320,7 +320,7 @@ alumni_bot.on("poll_answer", async (ctx) => {
   if (isUserInGroup(user)) {
     const requestOptions = {
       method: "POST",
-      uri: "http://localhost:3000/update-poll", // UPDATE URL FOR
+      uri: "http://137.184.74.25:3000/update-poll", // UPDATE URL FOR
       body: { pollId: pollId, option: chosenOption },
       json: true,
       headers: {
