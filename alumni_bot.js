@@ -107,7 +107,7 @@ alumni_bot.command("add", (ctx) => {
   }
 });
 
-alumni_bot.command("addCommunityImage", (ctx) => {
+alumni_bot.command("addcommunityimage", (ctx) => {
   ctx.session = {};
 
   if (isChatAuthorized(ctx.chat.id)) {

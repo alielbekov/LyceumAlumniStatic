@@ -374,7 +374,7 @@ app.post("/update-poll", checkAuth, (req, res) => {
       if (option === 0) {
         // Increment approveCount
         poll.approveCount++;
-        if (poll.approveCount === 1) {
+        if (poll.approveCount === 3) {
           //Can do something here ?!!!
           if(poll.pollType===0){
                   const { fName, lName, gradYear, imageID } = poll;
@@ -437,7 +437,7 @@ app.post("/update-poll", checkAuth, (req, res) => {
             console.log("Please select I was here");
             
               const { fName, lName, gradYear, imageID, approveCount } = poll;
-              if (approveCount === 1) {
+              if (approveCount === 3) {
                 const getFileUrl = `https://api.telegram.org/bot${process.env.ALUMNI_BOT_TOKEN}/getFile?file_id=${imageID}`;
             
                 axios
