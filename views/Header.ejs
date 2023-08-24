@@ -10,7 +10,7 @@
       <ul class="navbar-nav">
         <% years.forEach(navYear => { %>
           <li class="nav-item">
-            <a class="nav-link btn btn-secondary year text-white<%= (navYear === year) ? ' active' : '' %>"
+            <a class="nav-link btn btn-secondary year text-white<%= (navYear == year) ? ' active' : '' %>"
               href="/<%= navYear %>"><%= navYear %></a>
           </li>
         <% }); %>

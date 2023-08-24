@@ -35,7 +35,6 @@
 </head>
   <body>
     <%- include('./Header.ejs', { years: years, year:year }) %>
-
     <% if(page === 'main') { %>
       <%- include('./Main.ejs', { year: year, cards: cards }) %>
     <% } else if(page === 'resources') { %>
