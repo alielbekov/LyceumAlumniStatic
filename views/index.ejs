@@ -45,7 +45,14 @@
       <%- include('./Community-Photo.ejs', { year: year }) %>
     <% }else if(page === 'community') { %>
       <%- include('./Community.ejs', { year: year, images:images}) %>
-    <% }else { %>
+    <% }
+    else if(page === 'books') { %>
+      <%- include('./Books.ejs', { year: year}) %>
+    <% }
+    else if(page === 'links') { %>
+      <%- include('./Links.ejs', { year: year}) %>
+    <% }
+    else { %>
       <%- include('./Landing.ejs') %>
     <% } %>
    

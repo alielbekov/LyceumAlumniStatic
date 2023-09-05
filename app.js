@@ -243,6 +243,17 @@ app.get("/resources", (req, res) => {
   res.render("index", { years: years, page: "resources", year: null });
 });
 
+
+app.get("/books", (req, res) => {
+  res.render("index", { years: years, page: "books", year: null });
+});
+
+app.get("/links", (req, res) => {
+  res.render("index", { years: years, page: "links", year: null });
+});
+
+
+
 app.get("/teachers", (req, res) => {
   // your code here, e.g.,:
   res.render("index", { years: years, page: "teachers", year: null });
