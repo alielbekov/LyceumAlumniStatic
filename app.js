@@ -127,7 +127,7 @@ Graduate Year: ${gradYear}
     const pollMessage = await alumni_bot.telegram.sendPoll(authorizedChatIds[1], pollQuestion, pollOptions, {
       is_anonymous: false, // Change to true if you want the poll to be anonymous
       allows_multiple_answers: false,
-      open_period: 300
+      open_period: 600
     });
 
       // Save the poll to the MongoDB database
@@ -543,7 +543,7 @@ async function handleCommunityPost(req, res, next) {
   const pollMessage = await alumni_bot.telegram.sendPoll(authorizedChatIds[1], pollQuestion, pollOptions, {
     is_anonymous: false, // Change to true if you want the poll to be anonymous
     allows_multiple_answers: false,
-    open_period: 300
+    open_period: 600
   });
 
   // Save the poll to the MongoDB database

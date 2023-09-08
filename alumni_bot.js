@@ -162,7 +162,7 @@ alumni_bot.on("text", async (ctx) => {
           ctx
             .replyWithPoll("Do you approve this member?", ["Yes", "No"], {
               is_anonymous: false,
-              open_period: 300,
+              open_period: 600,
             })
             .then(async (pollMessage) => {
               const poll = new Poll({
@@ -261,7 +261,7 @@ alumni_bot.on("photo", async (ctx) => {
           {
             is_anonymous: false, 
             allows_multiple_answers: false,
-            open_period: 300
+            open_period: 600
           }
         ).then(async (pollMessage) =>{
         
